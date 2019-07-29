@@ -1,14 +1,16 @@
 <template>
 	<div id="app">
+		<ghost-input/>
 		<shell/>
 	</div>
 </template>
 
 <script>
 	import Shell from "./components/shell";
+	import GhostInput from "./components/ghostInput";
 
 	export default {
-		components: {Shell}
+		components: {GhostInput, Shell}
 	}
 </script>
 

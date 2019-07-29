@@ -11,7 +11,7 @@
 
 	export default {
 		name: "shell",
-		components: {Prompt, Introduction}
+		components: { Prompt, Introduction}
 	}
 </script>
 

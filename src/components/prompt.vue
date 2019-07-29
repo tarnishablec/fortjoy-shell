@@ -1,14 +1,18 @@
 <template>
 	<div class="prompt">
+		<command-history v-for="(his,index) in $store.state.commandLog" :key="index" :command="his.command" :path="his.path"
+		                 :role="his.role"/>
 		<command-line/>
 	</div>
 </template>
 
 <script>
 	import CommandLine from "./commandLine";
+	import CommandHistory from "./commandHistory";
+
 	export default {
 		name: "prompt",
-		components: {CommandLine},
+		components: {CommandHistory, CommandLine},
 		data() {
 			return {}
 		}
