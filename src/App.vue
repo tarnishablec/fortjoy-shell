@@ -1,16 +1,14 @@
 <template>
 	<div id="app">
-		<ghost-input/>
 		<shell/>
 	</div>
 </template>
 
 <script>
 	import Shell from "./components/shell";
-	import GhostInput from "./components/ghostInput";
 
 	export default {
-		components: {GhostInput, Shell}
+		components: {Shell}
 	}
 </script>
 
@@ -27,5 +25,9 @@
 	body {
 		margin: 0;
 		background: #1e0320;
+	}
+
+	*{
+		box-sizing: border-box;
 	}
 </style>
