@@ -22,5 +22,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+	.introduction{
+		margin-bottom: 1rem;
+	}
 </style>
