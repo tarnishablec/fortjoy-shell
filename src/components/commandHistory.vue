@@ -1,10 +1,10 @@
 <template>
-	<section class="command-history">
+	<section class="command command-history">
 		<span class="command-role">{{role}}</span>
 		<span>@fortjoy.sh:</span>
 		<span>{{path}}</span>
 		<span>$</span>
-		<span>{{command}}</span>
+		<span v-for="c in command">{{c===' '?'&ensp;':c}}</span>
 	</section>
 </template>
 
@@ -15,6 +15,7 @@
 			role: String,
 			path: String,
 			command: String,
+			result: null,
 		}
 	}
 </script>

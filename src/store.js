@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {resolveCommand} from './shell'
 
 Vue.use(Vuex);
+
 
 export default new Vuex.Store({
 	state: {
 		version: '1.0.0',
 		slogan: "Everything we hear is an opinion, not a fact. Everything we see is a perspective, not the truth.",
 		role: 'guest',
-		commandBuffer: '',
-		commandLog: [],
+		commandBuffer: 'cd /blog',
+		commandLogs: [],
 	},
 	mutations: {
 		commitCommand(state) {
@@ -17,11 +19,12 @@ export default new Vuex.Store({
 				command: state.commandBuffer,
 				role: state.role,
 				path: '/',
-				result: 1,
+				result: resolveCommand(state.commandBuffer),
 			};
-			state.commandLog.push(his);
+			state.commandLogs.push(his);
 			state.commandBuffer = '';
 		}
 	},
-	actions: {}
+	actions: {
+	}
 })

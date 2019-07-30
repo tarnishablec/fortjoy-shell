@@ -1,7 +1,7 @@
 <template>
 	<div class="prompt">
-		<command-history v-for="(his,index) in $store.state.commandLog" :key="index" :command="his.command" :path="his.path"
-		                 :role="his.role"/>
+		<command-history v-for="(his,index) in $store.state.commandLogs" :key="index" :command="his.command" :path="his.path"
+		                 :role="his.role" :result="his.result"/>
 		<command-line/>
 	</div>
 </template>
@@ -21,7 +21,6 @@
 
 <style lang="scss" scoped>
 	.prompt {
-		min-height: 1rem;
-		flex: 1;
+		line-height: 1.2rem;
 	}
 </style>

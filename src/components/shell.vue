@@ -1,8 +1,9 @@
 <template>
-	<label for="ghost-input" class="shell">
+	<label for="ghost-input" class="shell" :class="{'focus':isFocus}">
+		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false" v-model="$store.state.commandBuffer"
+		       @keydown="enterCommand"/>
 		<introduction/>
 		<prompt/>
-		<input id="ghost-input" v-model="$store.state.commandBuffer"/>
 	</label>
 </template>
 
@@ -12,7 +13,23 @@
 
 	export default {
 		name: "shell",
-		components: {Prompt, Introduction}
+		components: {Prompt, Introduction},
+		data() {
+			return {
+				isFocus: false,
+			}
+		},
+		methods: {
+			enterCommand(e) {
+				const shell = document.querySelector('.shell');
+				if (e.which === 13) {
+					this.$store.commit('commitCommand');
+					this.$nextTick(() => {
+						shell.scrollTo(0, shell.scrollHeight);
+					})
+				}
+			},
+		},
 	}
 </script>
 
@@ -26,6 +43,13 @@
 		display: flex;
 		flex-direction: column;
 		border: 1px solid white;
+		overflow-y: auto;
+		overflow-x: hidden;
+		transition: 0.2s;
+
+		&.focus {
+			box-shadow: 0 0 2px 2px white;
+		}
 
 		#ghost-input {
 			line-height: 0;

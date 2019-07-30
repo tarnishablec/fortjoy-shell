@@ -1,12 +1,12 @@
 <template>
-	<div class="command">
-		<span class="command-role">[{{$store.state.role}}</span>
+	<section class="command command-input">
+		<span class="command-role">{{$store.state.role}}</span>
 		<span>@fortjoy.sh:</span>
 		<span>{{$route.fullPath}}</span>
 		<span>$</span>
-		<span v-for="c in $store.state.commandBuffer">{{c}}</span>
+		<span v-for="c in $store.state.commandBuffer">{{c===' '?'&ensp;':c}}</span>
 		<live-cursor/>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -22,8 +22,9 @@
 	.command {
 		width: 100%;
 		overflow-x: hidden;
-		display: inline-flex;
 		flex-wrap: wrap;
+		color: #e2e2e2;
+		display: flex;
 
 		span:nth-child(1) {
 			color: #ff7171;
@@ -43,8 +44,5 @@
 			margin-right: 0.5rem;
 		}
 
-		span:nth-child(5) {
-			color: antiquewhite;
-		}
 	}
 </style>
