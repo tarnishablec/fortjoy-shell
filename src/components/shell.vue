@@ -1,23 +1,22 @@
 <template>
-	<div class="shell">
-		<ghost-input/>
+	<label for="ghost-input" class="shell">
 		<introduction/>
 		<prompt/>
-	</div>
+		<input id="ghost-input" v-model="$store.state.commandBuffer"/>
+	</label>
 </template>
 
 <script>
 	import Introduction from "./introduction";
 	import Prompt from "./prompt";
-	import GhostInput from "./ghostInput";
 
 	export default {
 		name: "shell",
-		components: {GhostInput, Prompt, Introduction}
+		components: {Prompt, Introduction}
 	}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.shell {
 		width: calc(100vw - 10px);
 		max-width: 850px;
@@ -27,5 +26,11 @@
 		display: flex;
 		flex-direction: column;
 		border: 1px solid white;
+
+		#ghost-input {
+			line-height: 0;
+			position: absolute;
+			top: -10rem;
+		}
 	}
 </style>

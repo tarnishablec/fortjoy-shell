@@ -22,5 +22,6 @@
 <style lang="scss" scoped>
 	.prompt {
 		min-height: 1rem;
+		flex: 1;
 	}
 </style>
