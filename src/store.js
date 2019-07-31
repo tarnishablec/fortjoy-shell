@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {resolveCommand} from './shell'
+import {resolveCommand} from './resolver/shell'
 
 Vue.use(Vuex);
 

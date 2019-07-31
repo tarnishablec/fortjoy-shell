@@ -14,7 +14,6 @@
 		width: 0.5rem;
 		height: 1.125rem;
 		background: white;
-		vertical-align: bottom;
 		animation: shine 1.5s linear infinite;
 	}
 
