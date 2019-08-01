@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from "@/router";
 import {resolveCommand} from './resolver/shell'
 
 Vue.use(Vuex);
@@ -12,19 +13,26 @@ export default new Vuex.Store({
 		role: 'guest',
 		commandBuffer: 'cd /blog',
 		commandLogs: [],
+
+		introShow: true,
 	},
 	mutations: {
 		commitCommand(state) {
 			let his = {
 				command: state.commandBuffer,
 				role: state.role,
-				path: '/',
+				path: router.app.$route.fullPath,
 				result: resolveCommand(state.commandBuffer),
 			};
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
+		},
+		clearShell(state) {
+			setTimeout(() => {
+				state.introShow = false;
+				state.commandLogs = [];
+			}, 0);
 		}
 	},
-	actions: {
-	}
+	actions: {}
 })

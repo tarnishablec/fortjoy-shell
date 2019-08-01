@@ -1,3 +1,5 @@
+[Preview](https://tarnishablec.github.io/fortjoy-shell/#/)
+
 # fortjoy-shell
 
 ## Project setup

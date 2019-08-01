@@ -5,6 +5,8 @@
 		<span>{{path}}</span>
 		<span>$</span>
 		<span v-for="c in command">{{c===' '?'&ensp;':c}}</span>
+		<br>
+		<component :is="result"/>
 	</section>
 </template>
 
@@ -15,7 +17,7 @@
 			role: String,
 			path: String,
 			command: String,
-			result: null,
+			result: String,
 		}
 	}
 </script>

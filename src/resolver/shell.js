@@ -1,4 +1,5 @@
-import router from "../router";
+import router from "@/router";
+import store from '@/store'
 import _ from 'lodash'
 
 export function resolveCommand(command) {
@@ -6,7 +7,7 @@ export function resolveCommand(command) {
 	if (arr.length > 0) {
 		try {
 			eval(`${arr[0]}('${arr[1]}')`)
-		}catch (e) {
+		} catch (e) {
 
 		}
 	}
@@ -34,9 +35,10 @@ function pwd() {
 }
 
 function ll() {
+
 }
 
 function clear() {
-
+	store.commit('clearShell');
 }
 

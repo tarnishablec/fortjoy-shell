@@ -2,14 +2,14 @@
 	<label for="ghost-input" class="shell" :class="{'focus':isFocus}">
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false" v-model="$store.state.commandBuffer"
 		       @keydown="enterCommand"/>
-		<introduction/>
+		<introduction v-if="$store.state.introShow"/>
 		<prompt/>
 	</label>
 </template>
 
 <script>
-	import Introduction from "./introduction";
-	import Prompt from "./prompt";
+	import Introduction from "./ui/introduction";
+	import Prompt from "./ui/prompt";
 
 	export default {
 		name: "shell",
