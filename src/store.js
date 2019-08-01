@@ -17,16 +17,6 @@ export default new Vuex.Store({
 		introShow: true,
 	},
 	mutations: {
-		commitCommand(state) {
-			let his = {
-				command: state.commandBuffer,
-				role: state.role,
-				path: router.app.$route.fullPath,
-				result: resolveCommand(state.commandBuffer),
-			};
-			state.commandLogs.push(his);
-			state.commandBuffer = '';
-		},
 		clearShell(state) {
 			setTimeout(() => {
 				state.introShow = false;
@@ -34,5 +24,17 @@ export default new Vuex.Store({
 			}, 0);
 		}
 	},
-	actions: {}
+	actions: {
+		async commitCommand(context) {
+			let res = await resolveCommand(context.state.commandBuffer);
+			let his = {
+				command: context.state.commandBuffer,
+				role: context.state.role,
+				path: router.app.$route.fullPath,
+				result: res,
+			};
+			context.state.commandLogs.push(his);
+			context.state.commandBuffer = '';
+		},
+	}
 })

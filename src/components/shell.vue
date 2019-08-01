@@ -23,7 +23,7 @@
 			enterCommand(e) {
 				const shell = document.querySelector('.shell');
 				if (e.which === 13) {
-					this.$store.commit('commitCommand');
+					this.$store.dispatch('commitCommand');
 					this.$nextTick(() => {
 						shell.scrollTo(0, shell.scrollHeight);
 					})
