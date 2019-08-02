@@ -10,7 +10,7 @@ module.exports = {
 	},
 
 	devServer: {
-		port: 9874,
+		port: 8521,
 
 	},
 	runtimeCompiler: true

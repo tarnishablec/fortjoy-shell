@@ -3,7 +3,9 @@ import store from '@/store'
 import _ from 'lodash'
 
 class Result {
+	constructor(){
 
+	}
 }
 
 export function resolveCommand(command) {
