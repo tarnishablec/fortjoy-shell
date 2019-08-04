@@ -30,7 +30,9 @@
 	}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../../style/variables.scss";
+
 	.banner {
 		color: navajowhite;
 		font-size: 10px;
@@ -41,7 +43,7 @@
 		margin-bottom: calc(-30px - 1rem);
 	}
 
-	@media screen and (max-width: 850px) {
+	@media screen and (max-width: $mid-width) {
 		.banner {
 			transform: scale(0.5);
 			margin-top: -50px;
@@ -49,7 +51,7 @@
 		}
 	}
 
-	@media screen and (max-width: 400px) {
+	@media screen and (max-width: $small-width) {
 		.banner {
 			transform: scale(0.35);
 			margin-top: -80px;

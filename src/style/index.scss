@@ -1,4 +1,10 @@
-@import "command";
+@import "ui";
+@import "mixins";
+@import "variables";
+
+*{
+  box-sizing: border-box;
+}
 
 ::-webkit-scrollbar {
   width: 5px;

@@ -1,5 +1,5 @@
 <template functional>
-	<hr>
+	<hr class="dash-line">
 </template>
 
 <script>
@@ -9,7 +9,7 @@
 </script>
 
 <style lang="scss" scoped>
-	hr {
+	hr.dash-line {
 		border: 0 none;
 		border-top: 2px dashed green;
 	}

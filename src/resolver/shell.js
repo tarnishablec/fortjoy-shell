@@ -13,6 +13,8 @@ export function resolveCommand(command) {
 		let arr = _.without(command.split(' '), '');
 		if (arr.length > 0) {
 			resolve(eval(`${arr[0]}('${arr[1]}')`));
+		}else {
+			resolve();
 		}
 	}))
 }
