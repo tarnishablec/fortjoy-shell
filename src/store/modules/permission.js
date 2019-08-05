@@ -1,5 +1,14 @@
+import ROLE from "@/resolver/role";
+
 export default {
 	state: {
-		role: 'guest',
+		role: ROLE.guest,
+	},
+	mutations: {
+		switchRole(state, role) {
+			state.role = role;
+		}
 	}
 };
+
+

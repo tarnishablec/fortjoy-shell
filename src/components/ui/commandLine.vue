@@ -1,6 +1,6 @@
 <template>
 	<section class="command command-input">
-		<span class="command-role">{{$store.state.permission.role}}</span>
+		<span class="command-role">{{$store.state.permission.role.description}}</span>
 		<span>@fortjoy.sh:</span>
 		<span>{{$route.fullPath}}</span>
 		<span>$</span>
@@ -18,6 +18,6 @@
 	}
 </script>
 
-<style lang="scss">
+<style scoped>
 
 </style>

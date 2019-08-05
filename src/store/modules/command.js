@@ -3,7 +3,8 @@ import {resolveCommand} from "@/resolver/shell";
 
 export default {
 	state: {
-		commandBuffer: null,
+		introShow: true,
+		commandBuffer: '',
 		commandLogs: [],
 	},
 	mutations: {
@@ -14,10 +15,17 @@ export default {
 			}, 0);
 		},
 	},
-	actions:{
-		commitCommand(context){
-			console.log(context);
-			resolveCommand(context.state.commandBuffer)
+	actions: {
+		async commitCommand({state, rootState}) {
+			let his = {
+				command: state.commandBuffer,
+				role: rootState.permission.role.description,
+				path: router.app.$route.path
+			};
+			console.log(his);
+			his.result = await resolveCommand(state.commandBuffer);
+			state.commandLogs.push(his);
+			state.commandBuffer = '';
 		}
 	}
 };

@@ -1,12 +1,14 @@
 <template>
-	<section class="command command-history">
-		<span class="command-role">{{role}}</span>
-		<span>@fortjoy.sh:</span>
-		<span>{{path}}</span>
-		<span>$</span>
-		<span v-for="c in command">{{c===' '?'&ensp;':c}}</span>
-		<br>
-		<component :is="result"/>
+	<section>
+		<div class="command command-history">
+			<span class="command-role">{{role}}</span>
+			<span>@fortjoy.sh:</span>
+			<span>{{path}}</span>
+			<span>$</span>
+			<span v-for="c in command">{{c===' '?'&ensp;':c}}</span>
+		</div>
+		<div>{{result}}</div>
+		<!--		<component :is="result"/>-->
 	</section>
 </template>
 

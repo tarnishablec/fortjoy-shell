@@ -3,7 +3,7 @@
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
 		       v-model="$store.state.command.commandBuffer"
 		       @keydown="enterCommand"/>
-		<introduction v-if="$store.state.app.introShow"/>
+		<introduction v-if="$store.state.command.introShow"/>
 		<prompt/>
 	</label>
 </template>
@@ -24,9 +24,10 @@
 			enterCommand(e) {
 				const shell = document.querySelector('.shell');
 				if (e.which === 13) {
-					this.$store.dispatch('commitCommand');
-					this.$nextTick(() => {
-						shell.scrollTo(0, shell.scrollHeight);
+					this.$store.dispatch('commitCommand').then(() => {
+						this.$nextTick(() => {
+							shell.scrollTo(0, shell.scrollHeight);
+						})
 					})
 				}
 				if (e.which === 38) {
@@ -39,9 +40,11 @@
 
 <style lang="scss" scoped>
 	@import "../style/mixins";
+	@import "../style/variables";
 
 	.shell {
-		max-width: 850px;
+		flex-shrink: 0;
+		width: $mid-width;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -53,6 +56,12 @@
 			line-height: 0;
 			position: absolute;
 			top: -10rem;
+		}
+	}
+
+	@media screen and (max-width: $mid-width) {
+		.shell {
+			width: 100%;
 		}
 	}
 </style>

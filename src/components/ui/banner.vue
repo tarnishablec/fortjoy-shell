@@ -43,7 +43,7 @@
 		margin-bottom: calc(-30px - 1rem);
 	}
 
-	@media screen and (max-width: $mid-width) {
+	@media screen and (max-width: $mid-width - 50px) {
 		.banner {
 			transform: scale(0.5);
 			margin-top: -50px;
