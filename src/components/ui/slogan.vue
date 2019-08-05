@@ -1,5 +1,5 @@
 <template>
-	<span class="slogan">"{{$store.state.slogan}}"</span>
+	<span class="slogan">"{{$store.state.app.slogan}}"</span>
 </template>
 
 <script>

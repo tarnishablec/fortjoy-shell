@@ -1,6 +1,6 @@
 <template>
 	<div class="version">
-		<span>v{{$store.state.version}}</span>
+		<span>v{{$store.state.app.version}}</span>
 	</div>
 </template>
 
