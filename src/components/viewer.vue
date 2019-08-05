@@ -16,19 +16,18 @@
 
 	.viewer {
 		flex: 1;
-		height: 100vh;
 		margin-left: 8px;
 		padding: 8px;
+		overflow-y: auto;
 		@include layout
 	}
 
-	@media screen and (max-width: $small-width) {
+	@media screen and (max-width: $mid-width) {
 		#app {
-			display: block;
+			display: block !important;
 
-			.viewer{
+			.viewer {
 				margin: 16px 0 0 0;
-
 			}
 		}
 	}

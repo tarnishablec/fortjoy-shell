@@ -4,7 +4,7 @@
 		<span>@fortjoy.sh:</span>
 		<span>{{$route.fullPath}}</span>
 		<span>$</span>
-		<span v-for="c in $store.state.commandBuffer">{{c===' '?'&ensp;':c}}</span>
+		<span v-for="c in $store.state.command.commandBuffer">{{c===' '?'&ensp;':c}}</span>
 		<live-cursor/>
 	</section>
 </template>

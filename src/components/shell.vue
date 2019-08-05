@@ -1,6 +1,7 @@
 <template>
 	<label for="ghost-input" class="shell" :class="{'focus':isFocus}">
-		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false" v-model="$store.state.commandBuffer"
+		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
+		       v-model="$store.state.command.commandBuffer"
 		       @keydown="enterCommand"/>
 		<introduction v-if="$store.state.app.introShow"/>
 		<prompt/>
