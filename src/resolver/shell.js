@@ -2,6 +2,7 @@ import router from "@/router";
 import store from '@/store'
 import _ from 'lodash'
 import ROLE from "@/resolver/role";
+import {routeEureka,pathToArray} from "@/utils/routerUtils";
 
 class Result {
 	constructor() {
@@ -26,18 +27,22 @@ export function resolveCommand(command) {
 }
 
 function cd(path) {
-
+	if (routeEureka(pathToArray(path),store.state.router.routes)){
+		router.push(path);
+	}else {
+		return `-bash: cd: ${path}: No such file or directory`
+	}
 }
 
 function su(role) {
 	if (ROLE.hasOwnProperty(role)) {
 		store.commit('switchRole', ROLE[role])
-	}else {
+	} else {
 		return `su: user ${role} does not exist`
 	}
 }
 
-function cat() {
+function cat(filename) {
 	return 'cat';
 }
 
@@ -46,7 +51,7 @@ function ls() {
 }
 
 function pwd() {
-
+	return router.app.$route.fullPath;
 }
 
 function ll() {
@@ -59,6 +64,5 @@ function clear() {
 }
 
 function help() {
-	return
 }
 

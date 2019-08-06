@@ -15,6 +15,7 @@
 	@import "../style/variables";
 
 	.viewer {
+		flex: 1;
 		margin-left: 8px;
 		padding: 8px;
 		overflow-y: auto;
