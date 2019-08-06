@@ -23,11 +23,12 @@
 		methods: {
 			updateInput(e) {
 				this.$store.state.command.commandBuffer = e.target.value;
+				this.$store.commit('updateCaret', e.target.selectionStart);
 				this.$store.state.command.selectionStart = e.target.selectionStart;
 			},
-			updateCaret(e){
+			updateCaret(e) {
 				if (e.which === 37 || e.which === 39) {
-					this.$store.state.command.selectionStart = e.target.selectionStart;
+					this.$store.commit('updateCaret', e.target.selectionStart);
 				}
 			},
 			enterCommand(e) {

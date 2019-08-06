@@ -5,7 +5,7 @@ export default {
 	state: {
 		introShow: true,
 		commandBuffer: '',
-		selectionStart: 0,
+		caretPosition: 0,
 		commandLogs: [],
 	},
 	mutations: {
@@ -15,8 +15,8 @@ export default {
 				state.commandLogs = [];
 			}, 0);
 		},
-		updateSelectionStart(state, index) {
-			state.selectionStart = index;
+		updateCaret(state, index) {
+			state.caretPosition = index;
 		}
 	},
 	actions: {
