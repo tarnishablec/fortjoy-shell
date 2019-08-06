@@ -5,16 +5,14 @@
 		<span>{{$route.fullPath}}</span>
 		<span>$</span>
 		<span v-for="(c,index) in $store.state.command.commandBuffer+' '" :key="index"
-		      :class="{'cursor':index===$store.state.command.caretPosition}">{{c===' '?'&ensp;':c}}</span>
+		      :class="{'caret':index===$store.state.command.caretPosition}">{{c===' '?'&ensp;':c}}</span>
 	</section>
 </template>
 
 <script>
-	import liveCursor from "./liveCursor";
 
 	export default {
 		name: "commandLine",
-		components: {liveCursor},
 	}
 </script>
 
