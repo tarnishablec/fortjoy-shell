@@ -1,0 +1,22 @@
+.cursor {
+  animation: shine 1.5s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background: white;
+    color: black;
+  }
+  50% {
+    background: white;
+    color: black;
+  }
+  51% {
+    background: transparent;
+    color: white;
+  }
+  100% {
+    background: transparent;
+    color: white;
+  }
+}

@@ -1,8 +1,8 @@
 <template>
-	<label for="ghost-input" class="shell" :class="{'focus':isFocus}">
+	<label for="ghost-input" class="shell" :class="{'focus':isFocus}" ref="shell">
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
 		       v-model="$store.state.command.commandBuffer"
-		       @keydown="enterCommand"/>
+		       @keyup="enterCommand" autofocus/>
 		<introduction v-if="$store.state.command.introShow"/>
 		<prompt/>
 	</label>
@@ -22,7 +22,9 @@
 		},
 		methods: {
 			enterCommand(e) {
-				const shell = document.querySelector('.shell');
+				const shell = this.$refs.shell;
+				console.log(e.target.selectionStart + '---' + e.target.selectionEnd);
+				this.$store.commit('updateSelectionStart', e.target.selectionStart);
 				if (e.which === 13) {
 					this.$store.dispatch('commitCommand').then(() => {
 						this.$nextTick(() => {
@@ -55,7 +57,7 @@
 		#ghost-input {
 			line-height: 0;
 			position: absolute;
-			top: -10rem;
+			top: -5rem;
 		}
 	}
 

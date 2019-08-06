@@ -5,6 +5,7 @@ export default {
 	state: {
 		introShow: true,
 		commandBuffer: '',
+		selectionStart: 0,
 		commandLogs: [],
 	},
 	mutations: {
@@ -14,6 +15,9 @@ export default {
 				state.commandLogs = [];
 			}, 0);
 		},
+		updateSelectionStart(state, index) {
+			state.selectionStart = index;
+		}
 	},
 	actions: {
 		async commitCommand({state, rootState}) {
@@ -27,5 +31,8 @@ export default {
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
 		}
+	},
+	getters: {
+		cursorPosition: state => state.selectionStart,
 	}
 };
