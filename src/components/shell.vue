@@ -3,7 +3,6 @@
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
 		       :value="$store.state.command.commandBuffer"
 		       @input="updateInput" @keydown="enterCommand" autofocus ref="input"/>
-		<!--		@keyup="updateCaret"-->
 		<introduction v-if="$store.state.command.introShow"/>
 		<prompt/>
 	</label>
@@ -55,7 +54,10 @@
 					})
 				}
 				if (e.which === 38) {
-					this.$store.commit('lastCommand');
+					this.$store.dispatch('updateCommandOffset', -1);
+				}
+				if (e.which === 40) {
+					this.$store.dispatch('updateCommandOffset', 1);
 				}
 			},
 		},

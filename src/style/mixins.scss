@@ -1,9 +1,9 @@
-@mixin layout{
+@mixin layout {
   border: 1px solid white;
   overflow-y: auto;
   overflow-x: hidden;
 
   &.focus {
-    box-shadow: 0 0 2px 2px white;
+    border: 1px solid indianred;
   }
 }
