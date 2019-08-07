@@ -2,7 +2,8 @@
 	<label for="ghost-input" class="shell" :class="{'focus':isFocus}" ref="shell">
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
 		       :value="$store.state.command.commandBuffer"
-		       @input="updateInput" @keydown="enterCommand" @keyup="updateCaret" autofocus/>
+		       @input="updateInput" @keydown="enterCommand" autofocus ref="input"/>
+		<!--		@keyup="updateCaret"-->
 		<introduction v-if="$store.state.command.introShow"/>
 		<prompt/>
 	</label>
@@ -20,18 +21,30 @@
 				isFocus: false,
 			}
 		},
+		// mounted() {
+		// 	const input = document.querySelector('#ghost-input');
+		// 	console.log(input.attributes);
+		// 	const caretObserver = new MutationObserver(mutations => {
+		// 		mutations.forEach(m => {
+		// 			console.log(m);
+		//
+		// 		})
+		// 	});
+		// 	caretObserver.observe(input, {
+		// 		attributes: true,
+		// 		attributeFilter: ['caret'],
+		// 	})
+		// },
 		methods: {
 			updateInput(e) {
 				this.$store.state.command.commandBuffer = e.target.value;
-				this.$store.commit('updateCaret', e.target.selectionStart);
 				this.$store.state.command.selectionStart = e.target.selectionStart;
 			},
-			updateCaret(e) {
-				if (e.which === 37 || e.which === 39) {
-					this.$store.commit('updateCaret', e.target.selectionStart);
-				}
-			},
 			enterCommand(e) {
+				const input = this.$refs.input;
+				setTimeout(() => {
+					this.$store.commit('updateCaret', input.selectionStart);
+				}, 0);
 				const shell = this.$refs.shell;
 				// console.log(e.which);
 				if (e.which === 13) {
