@@ -2,16 +2,16 @@ import router from "@/router";
 import store from '@/store'
 import _ from 'lodash'
 import ROLE from "@/resolver/role";
-import {routeEureka,pathToArray} from "@/utils/routerUtils";
+import {routeEureka, pathToArray} from "@/utils/routerUtils";
 
-class Result {
+export class Result {
 	constructor() {
 
 	}
 }
 
 export function resolveCommand(command) {
-	return new Promise(((resolve, reject) => {
+	return new Promise(((resolve) => {
 		let arr = _.without(command.split(' '), '');
 		if (arr.length > 0) {
 			try {
@@ -27,9 +27,9 @@ export function resolveCommand(command) {
 }
 
 function cd(path) {
-	if (routeEureka(pathToArray(path),store.state.router.routes)){
+	if (routeEureka(pathToArray(path), store.state.router.routes)) {
 		router.push(path);
-	}else {
+	} else {
 		return `-bash: cd: ${path}: No such file or directory`
 	}
 }
@@ -64,5 +64,6 @@ function clear() {
 }
 
 function help() {
+	return `help`;
 }
 

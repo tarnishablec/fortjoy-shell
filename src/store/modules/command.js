@@ -13,16 +13,15 @@ export default {
 		resetCaret(state) {
 			state.caretPosition = 0;
 		},
+		updateCaret(state, index) {
+			state.caretPosition = index;
+		},
 		clear(state) {
 			setTimeout(() => {
 				state.introShow = false;
 				state.commandLogs = [];
 			}, 0);
 		},
-		updateCaret(state, index) {
-			state.caretPosition = index;
-		},
-
 	},
 	actions: {
 		async commitCommand({state, commit, rootState}) {
@@ -48,8 +47,6 @@ export default {
 			setTimeout(() => {
 				commit('updateCaret', state.commandBuffer.length);
 			}, 0);
-			console.log(state.commandLogs);
-			console.log(getters.commandChoose);
 		},
 	},
 	getters: {
