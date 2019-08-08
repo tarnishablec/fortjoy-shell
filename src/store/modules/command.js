@@ -8,8 +8,15 @@ export default {
 		caretPosition: 0,
 		commandLogs: [],
 		commandOffset: 0,
+		resolving: false,
 	},
 	mutations: {
+		startResolve(state) {
+			state.resolving = true;
+		},
+		endResolve(state) {
+			state.resolving = false;
+		},
 		resetCaret(state) {
 			state.caretPosition = 0;
 		},
@@ -28,9 +35,9 @@ export default {
 			let his = {
 				command: state.commandBuffer,
 				role: rootState.permission.role.description,
-				path: router.app.$route.path
+				path: router.app.$route.path,
+				result: await resolveCommand(state.commandBuffer),
 			};
-			his.result = await resolveCommand(state.commandBuffer);
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
 			commit('resetCaret');

@@ -10,20 +10,22 @@ export class Result {
 	}
 }
 
-export function resolveCommand(command) {
-	return new Promise(((resolve) => {
+export async function resolveCommand(command) {
+	return await new Promise(((resolve, reject) => {
+		store.commit('disableCommit');
 		let arr = _.without(command.split(' '), '');
 		if (arr.length > 0) {
 			try {
-				let res = eval(`${arr[0]}('${arr[1]}')`);
-				resolve(res);
+				resolve(eval(`${arr[0]}('${arr[1]}')`))
 			} catch (e) {
 				resolve(`-bash ${arr[0]}: command not found`)
 			}
 		} else {
 			resolve();
 		}
-	}))
+	})).finally(() => {
+		store.commit('enableCommit');
+	})
 }
 
 function cd(path) {
@@ -65,5 +67,14 @@ function clear() {
 
 function help() {
 	return `help`;
+}
+
+function test() {
+	return new Promise((resolve => {
+		setTimeout(() => {
+			resolve('done1');
+		}, 2000);
+	}));
+
 }
 

@@ -40,6 +40,9 @@
 				this.$store.state.command.selectionStart = e.target.selectionStart;
 			},
 			enterCommand(e) {
+				if (this.$store.state.command.resolving) {
+					return;
+				}
 				const input = this.$refs.input;
 				setTimeout(() => {
 					this.$store.commit('updateCaret', input.selectionStart);
