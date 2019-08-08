@@ -3,7 +3,7 @@
 		<input id="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false"
 		       :value="$store.state.command.commandBuffer"
 		       @input="updateInput" @keydown="enterCommand" autofocus ref="input"/>
-		<introduction v-if="$store.state.command.introShow"/>
+		<introduction v-show="$store.state.command.introShow"/>
 		<prompt/>
 	</label>
 </template>
@@ -20,20 +20,6 @@
 				isFocus: false,
 			}
 		},
-		// mounted() {
-		// 	const input = document.querySelector('#ghost-input');
-		// 	console.log(input.attributes);
-		// 	const caretObserver = new MutationObserver(mutations => {
-		// 		mutations.forEach(m => {
-		// 			console.log(m);
-		//
-		// 		})
-		// 	});
-		// 	caretObserver.observe(input, {
-		// 		attributes: true,
-		// 		attributeFilter: ['caret'],
-		// 	})
-		// },
 		methods: {
 			updateInput(e) {
 				this.$store.state.command.commandBuffer = e.target.value;

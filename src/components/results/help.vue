@@ -1,5 +1,7 @@
 <template>
-
+	<div >
+		tete
+	</div>
 </template>
 
 <script>
