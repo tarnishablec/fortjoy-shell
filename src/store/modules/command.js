@@ -1,11 +1,11 @@
 import router from "@/router";
-import {resolveCommand} from "@/resolver/shell";
 
 export default {
 	state: {
 		introShow: true,
 		commandBuffer: '',
 		resultBuffer: [],
+		resolveBuffer: {},
 		caretPosition: 0,
 		commandLogs: [],
 		commandOffset: 0,
@@ -18,6 +18,7 @@ export default {
 		updateCaret(state, index) {
 			state.caretPosition = index;
 		},
+
 	},
 	actions: {
 		clear({state}) {
@@ -32,13 +33,15 @@ export default {
 		endResolve({state}) {
 			state.resolving = false;
 		},
-		async pushHistory({state, commit, rootState}) {
-			let his = {
+		storeCurrent({state, rootState}) {
+			state.resolveBuffer = {
 				command: state.commandBuffer,
 				role: rootState.permission.role.description,
 				path: router.app.$route.path,
-				result: [...state.resultBuffer],
 			};
+		},
+		async pushHistory({state, commit}) {
+			let his = Object.assign(state.resolveBuffer, {result: [...state.resultBuffer]});
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
 			state.resultBuffer.splice(0, state.resultBuffer.length);

@@ -24,7 +24,7 @@
 
 <script>
 	import {pluck, tap, filter, switchMap, share} from 'rxjs/operators'
-	import {anyToObserver, resolveCommand} from "@/resolver/shell";
+	import {resolveCommand} from "@/resolver/shell";
 	import FakeCaret from "@/components/ui/fakeCaret";
 
 	export default {
@@ -45,6 +45,7 @@
 				pluck('event', 'which'),
 				filter(w => w === 13),
 				tap(() => this.$store.dispatch('startResolve')),
+				tap(() => this.$store.dispatch('storeCurrent')),
 				tap(() => {
 					this.$resolve = resolveCommand(this.$store.state.command.commandBuffer);
 					this.$resolve.subscribe({
@@ -53,16 +54,14 @@
 						},
 						error: () => null,
 						complete: () => {
-							setTimeout(() => {
-								this.$store.dispatch('endResolve').then(() => {
-									this.$store.dispatch('pushHistory').then(() => {
-										this.$nextTick(() => {
-											const shell = document.querySelector('.shell');
-											shell.scrollTo(0, shell.scrollHeight);
-										})
-									});
+							this.$store.dispatch('endResolve').then(() => {
+								this.$store.dispatch('pushHistory').then(() => {
+									this.$nextTick(() => {
+										const shell = document.querySelector('.shell');
+										shell.scrollTo(0, shell.scrollHeight);
+									})
 								});
-							}, 0)
+							});
 						}
 					})
 				}),

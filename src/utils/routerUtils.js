@@ -15,7 +15,7 @@ function routeFind(paths, routes) {
 	} else if (paths.length !== 0) {
 		return routeFind(paths, routes[index].children)
 	} else {
-		return true;
+		return routes[index];
 	}
 }
 
@@ -34,6 +34,5 @@ export function pathToArray(path) {
 	} else {
 		arr.splice(0, 0, '/')
 	}
-	console.log(arr);
 	return arr;
 }

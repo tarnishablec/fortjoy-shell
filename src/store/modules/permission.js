@@ -4,8 +4,9 @@ export default {
 	state: {
 		role: ROLE.guest,
 	},
-	mutations: {
-		switchRole(state, role) {
+	mutations: {},
+	actions: {
+		switchRole({state}, role) {
 			state.role = role;
 		}
 	}

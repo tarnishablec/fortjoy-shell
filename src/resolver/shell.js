@@ -11,6 +11,20 @@ function commandToArray(command) {
 	return _.without(command.split(' '), '');
 }
 
+function anyToObserver(r) {
+	if (r instanceof Observable) {
+		return r;
+	} else {
+		if (_.isArray(r) || (r instanceof Promise)) {
+			return from(r);
+		}
+		if (_.isString(r) || _.isNumber(r)) {
+			return of(r);
+		}
+		return of('')
+	}
+}
+
 export function resolveCommand(command) {
 	let res = null;
 	let arr = commandToArray(command);
@@ -25,22 +39,10 @@ export function resolveCommand(command) {
 	return anyToObserver(res)
 }
 
-function anyToObserver(r) {
-	if (r instanceof Observable) {
-		return r;
-	} else {
-		if (_.isArray(r)) {
-			return from(r);
-		}
-		if (_.isString(r) || _.isNumber(r)) {
-			return of(r);
-		}
-		return of('')
-	}
-}
+/*---------------------------------------------------*/
 
 function cd(path) {
-	if (routeEureka(path, store.state.router.routes)) {
+	if (routeEureka(path, router.options.routes)) {
 		router.push(path, () => null);
 	} else {
 		return `-bash: cd: ${path}: No such file or directory`
@@ -49,7 +51,7 @@ function cd(path) {
 
 function su(role) {
 	if (ROLE.hasOwnProperty(role)) {
-		store.commit('switchRole', ROLE[role])
+		store.dispatch('switchRole', ROLE[role])
 	} else {
 		return `su: user ${role} does not exist`
 	}
@@ -63,19 +65,24 @@ function ls() {
 }
 
 function pwd() {
-	return router.app.$route.fullPath;
+	return router.currentRoute.fullPath;
 }
 
 function ll() {
-
+	let res = [];
+	let routes = routeEureka(router.currentRoute.fullPath, router.options.routes).children;
+	routes.forEach(r => {
+		res.push(r.path.replace(/^\//, ''))
+	});
+	return res;
 }
 
 function clear() {
-	store.dispatch('clear');
+	return store.dispatch('clear');
 }
 
 function help() {
-	return ['pwd', 'cd', 'su', 'clear', 'node', 'test']
+	return ['pwd', 'cd', 'su', 'll', 'clear', 'node', 'test']
 }
 
 function node(code) {
