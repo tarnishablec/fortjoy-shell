@@ -11,14 +11,20 @@
 </script>
 
 <style lang="scss" scoped>
+	@import "../../style/variables";
+
 	.version{
 		text-align: end;
 		color: violet;
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		span{
 			position: relative;
 			display: inline-block;
 			padding-right: 1rem;
 		}
+	}
+
+	@media screen and (max-width: $small-width){
+		display: none;
 	}
 </style>
