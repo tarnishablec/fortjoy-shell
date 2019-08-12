@@ -23,8 +23,8 @@
 </template>
 
 <script>
-	import {pluck, tap, filter, switchMap, share, toArray} from 'rxjs/operators'
-	import {resolveCommand} from "@/resolver/shell";
+	import {pluck, tap, filter, switchMap, share} from 'rxjs/operators'
+	import {anyToObserver, resolveCommand} from "@/resolver/shell";
 	import FakeCaret from "@/components/ui/fakeCaret";
 
 	export default {
@@ -41,25 +41,31 @@
 				}, 0)),
 				share(),
 			);
-			this.$enter = $input.pipe(
+			const $enter = $input.pipe(
 				pluck('event', 'which'),
 				filter(w => w === 13),
 				tap(() => this.$store.dispatch('startResolve')),
 				tap(() => {
 					this.$resolve = resolveCommand(this.$store.state.command.commandBuffer);
 					this.$resolve.subscribe({
-						next: v => this.$store.state.command.resultBuffer.push(v),
+						next: v => {
+							this.$store.state.command.resultBuffer.push(v);
+						},
 						error: () => null,
 						complete: () => {
 							setTimeout(() => {
 								this.$store.dispatch('endResolve').then(() => {
-									this.$store.dispatch('commitCommand');
+									this.$store.dispatch('pushHistory').then(() => {
+										this.$nextTick(() => {
+											const shell = document.querySelector('.shell');
+											shell.scrollTo(0, shell.scrollHeight);
+										})
+									});
 								});
 							}, 0)
 						}
 					})
 				}),
-				switchMap(() => this.$resolve),
 			);
 			const $pre = $input.pipe(
 				pluck('event', 'which'),
@@ -76,7 +82,7 @@
 				})
 			);
 			return {
-				$enter: this.$enter,
+				$enter,
 				$pre,
 				$next,
 			}
@@ -86,30 +92,6 @@
 				this.$store.state.command.commandBuffer = e.target.value;
 				this.$store.state.command.selectionStart = e.target.selectionStart;
 			},
-			// enterCommand(e) {
-			// 	if (this.$store.state.command.resolving) {
-			// 		return;
-			// 	}
-			// 	const input = this.$refs.input;
-			// 	setTimeout(() => {
-			// 		this.$store.commit('updateCaret', input.selectionStart);
-			// 	}, 0);
-			// 	const shell = this.$refs.shell;
-			// 	// console.log(e.which);
-			// 	if (e.which === 13) {
-			// 		this.$store.dispatch('commitCommand').then(() => {
-			// 			this.$nextTick(() => {
-			// 				shell.scrollTo(0, shell.scrollHeight);
-			// 			})
-			// 		})
-			// 	}
-			// 	if (e.which === 38) {
-			// 		this.$store.dispatch('updateCommandOffset', -1);
-			// 	}
-			// 	if (e.which === 40) {
-			// 		this.$store.dispatch('updateCommandOffset', 1);
-			// 	}
-			// },
 		},
 	}
 </script>

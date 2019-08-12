@@ -32,7 +32,7 @@ export default {
 		endResolve({state}) {
 			state.resolving = false;
 		},
-		async commitCommand({state, commit, rootState}) {
+		async pushHistory({state, commit, rootState}) {
 			let his = {
 				command: state.commandBuffer,
 				role: rootState.permission.role.description,
@@ -41,7 +41,7 @@ export default {
 			};
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
-			state.resultBuffer.splice(0, 3);
+			state.resultBuffer.splice(0, state.resultBuffer.length);
 			commit('resetCaret');
 		},
 		updateCommandOffset({state, getters, commit}, offset) {
@@ -54,8 +54,10 @@ export default {
 				}
 			}
 			setTimeout(() => {
+				console.log(state.commandLogs);
 				commit('updateCaret', state.commandBuffer.length);
-			}, 0);
+				document.querySelector('input#ghost-input').setSelectionRange(state.commandBuffer.length, state.commandBuffer.length);
+			}, 0)
 		},
 	},
 	getters: {
