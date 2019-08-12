@@ -18,14 +18,14 @@ export default {
 		updateCaret(state, index) {
 			state.caretPosition = index;
 		},
-		clear(state) {
-			setTimeout(() => {
-				state.introShow = false;
-				state.commandLogs = [];
-			}, 0);
-		},
 	},
 	actions: {
+		clear({state}) {
+			setTimeout(() => {
+				state.introShow = false;
+				state.commandLogs.splice(0, state.commandLogs.length);
+			}, 10)
+		},
 		startResolve({state}) {
 			state.resolving = true;
 		},

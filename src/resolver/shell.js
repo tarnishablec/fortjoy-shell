@@ -71,7 +71,7 @@ function ll() {
 }
 
 function clear() {
-	store.commit('clear');
+	store.dispatch('clear');
 }
 
 function help() {
