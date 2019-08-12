@@ -12,12 +12,6 @@ export default {
 		resolving: false,
 	},
 	mutations: {
-		startResolve(state) {
-			state.resolving = true;
-		},
-		endResolve(state) {
-			state.resolving = false;
-		},
 		resetCaret(state) {
 			state.caretPosition = 0;
 		},
@@ -32,15 +26,22 @@ export default {
 		},
 	},
 	actions: {
+		startResolve({state}) {
+			state.resolving = true;
+		},
+		endResolve({state}) {
+			state.resolving = false;
+		},
 		async commitCommand({state, commit, rootState}) {
 			let his = {
 				command: state.commandBuffer,
 				role: rootState.permission.role.description,
 				path: router.app.$route.path,
-				result: state.resultBuffer,
+				result: [...state.resultBuffer],
 			};
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
+			state.resultBuffer.splice(0, 3);
 			commit('resetCaret');
 		},
 		updateCommandOffset({state, getters, commit}, offset) {

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<input id="ghost-input" :disabled="$store.state.command.resolving"
+		<input id="ghost-input"
 		       :value="$store.state.command.commandBuffer"
 		       @input="updateInput" v-stream:keydown="typeCommand$" autofocus ref="input"/>
 		<section class="command command-input">
@@ -9,13 +9,15 @@
 			<span>{{$route.fullPath}}</span>
 			<span>$</span>
 			<span v-for="(c,index) in $store.state.command.commandBuffer+' '" :key="index"
-			      :class="{'caret':index===$store.state.command.caretPosition}">{{c===' '?'&ensp;':c}}
+			      :class="{'caret':!$store.state.command.resolving && (index===$store.state.command.caretPosition)}">
+				{{c===' '?'&ensp;':c}}
 		</span>
 		</section>
-		<div>
+		<div class="result">
 			<div v-for="en in $store.state.command.resultBuffer">
-				{{en}}
+				<span>{{en}}</span>
 			</div>
+			<fake-caret v-if="$store.state.command.resolving"/>
 		</div>
 	</div>
 </template>
@@ -23,9 +25,11 @@
 <script>
 	import {pluck, tap, filter, switchMap, share, toArray} from 'rxjs/operators'
 	import {resolveCommand} from "@/resolver/shell";
+	import FakeCaret from "@/components/ui/fakeCaret";
 
 	export default {
 		name: "commandLine",
+		components: {FakeCaret},
 		domStreams: ['typeCommand$'],
 		subscriptions() {
 			const $input = this.typeCommand$.pipe(
@@ -40,18 +44,22 @@
 			this.$enter = $input.pipe(
 				pluck('event', 'which'),
 				filter(w => w === 13),
-				tap(() => this.$store.commit('startResolve')),
+				tap(() => this.$store.dispatch('startResolve')),
 				tap(() => {
 					this.$resolve = resolveCommand(this.$store.state.command.commandBuffer);
 					this.$resolve.subscribe({
-						next: () => null,
+						next: v => this.$store.state.command.resultBuffer.push(v),
 						error: () => null,
-						complete: () => this.$store.commit('endResolve'),
+						complete: () => {
+							setTimeout(() => {
+								this.$store.dispatch('endResolve').then(() => {
+									this.$store.dispatch('commitCommand');
+								});
+							}, 0)
+						}
 					})
 				}),
 				switchMap(() => this.$resolve),
-				tap(v => this.$store.state.command.resultBuffer.push(v)),
-				toArray(),
 			);
 			const $pre = $input.pipe(
 				pluck('event', 'which'),
@@ -106,6 +114,5 @@
 	}
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

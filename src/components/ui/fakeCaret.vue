@@ -1,5 +1,5 @@
 <template>
-	<div class="fake-caret">&ensp;</div>
+	<span class="fake-caret">&ensp;</span>
 </template>
 
 <script>
@@ -9,8 +9,9 @@
 </script>
 
 <style lang="scss" scoped>
-	.fake-caret {
-		display: inline-block;
+	.fake-caret{
 		background: white;
+		display: block;
+		width: 0.5rem;
 	}
 </style>
