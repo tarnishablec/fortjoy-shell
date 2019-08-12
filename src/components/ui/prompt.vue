@@ -11,12 +11,11 @@
 	import CommandLine from "./commandLine";
 	import CommandHistory from "./commandHistory";
 
+
 	export default {
 		name: "prompt",
 		components: {CommandHistory, CommandLine},
-		data() {
-			return {}
-		}
+
 	}
 </script>
 

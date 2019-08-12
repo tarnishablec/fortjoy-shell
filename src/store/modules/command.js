@@ -5,6 +5,7 @@ export default {
 	state: {
 		introShow: true,
 		commandBuffer: '',
+		resultBuffer: [],
 		caretPosition: 0,
 		commandLogs: [],
 		commandOffset: 0,
@@ -36,7 +37,7 @@ export default {
 				command: state.commandBuffer,
 				role: rootState.permission.role.description,
 				path: router.app.$route.path,
-				result: await resolveCommand(state.commandBuffer),
+				result: state.resultBuffer,
 			};
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
