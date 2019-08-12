@@ -1,7 +1,7 @@
 <template>
 	<div class="guide">
 		<slogan/>
-		<span>View the blog in the <router-link to="/blog">blog</router-link> folder.</span>
+		<span id="blog">View the blog in the <router-link to="/blog">blog</router-link> folder.</span>
 		<span>- <a href="mailto:tarnishablec@outlook.com" class="mail">Yihan &lttarnishablec@outlook.com&gt</a></span>
 		<span>Type <u>`help`</u> for a list of commands.</span>
 	</div>
@@ -30,18 +30,23 @@
 		}
 
 		span {
-			a {
-				color: currentColor;
-			}
-
-			u{
+			u {
 				text-decoration: none;
 				color: orange;
 			}
-
-			.mail {
-				color: violet;
-			}
 		}
+	}
+
+	#blog {
+		a{
+			color: currentColor;
+		}
+	}
+
+	a.mail {
+		all: unset;
+		cursor: pointer;
+		border-bottom: 1px solid currentColor;
+		color: violet;
 	}
 </style>
