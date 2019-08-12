@@ -31,9 +31,12 @@ export function resolveCommand(command) {
 	if (arr.length > 0) {
 		try {
 			res = eval(`${arr[0]}('${arr[1]}')`);
+			console.log(res)
 		} catch (e) {
-			if (e.name === 'ReferenceError')
-				res = `${arr[0]}: command not found`;
+			console.log(e.name);
+			if (_.indexOf(['SyntaxError', 'ReferenceError'], e.name) >= 0) {
+				res = `${arr[0]}: command not found`
+			}
 		}
 	}
 	return anyToObserver(res)
@@ -51,7 +54,7 @@ function cd(path) {
 
 function su(role) {
 	if (ROLE.hasOwnProperty(role)) {
-		store.dispatch('switchRole', ROLE[role])
+		return store.dispatch('switchRole', ROLE[role])
 	} else {
 		return `su: user ${role} does not exist`
 	}
