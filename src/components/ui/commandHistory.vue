@@ -8,7 +8,7 @@
 			<span v-for="c in command">{{c===' '?'&ensp;':c}}</span>
 		</div>
 		<div>
-			<div v-for="r in result">
+			<div v-for="r in result" style="word-break: break-all">
 				{{r}}
 			</div>
 		</div>

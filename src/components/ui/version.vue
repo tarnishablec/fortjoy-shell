@@ -16,7 +16,7 @@
 	.version{
 		text-align: end;
 		color: violet;
-		font-size: 0.8rem;
+		font-size: 0.9rem;
 		span{
 			position: relative;
 			display: inline-block;
@@ -25,6 +25,8 @@
 	}
 
 	@media screen and (max-width: $small-width){
-		display: none;
+		.version{
+			color: transparent;
+		}
 	}
 </style>
