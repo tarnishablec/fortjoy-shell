@@ -6,7 +6,7 @@
 		<section class="command command-input">
 			<span class="command-role">{{$store.state.permission.role.description}}</span>
 			<span>@fortjoy.sh:</span>
-			<span>{{$route.fullPath|cleanPath}}</span>
+			<span>{{$route.path}}</span>
 			<span>$</span>
 			<span v-for="(c,index) in $store.state.command.commandBuffer+' '" :key="index"
 			      :class="{'caret':!$store.state.command.resolving && (index===$store.state.command.caretPosition)}">
@@ -26,14 +26,10 @@
 	import {pluck, tap, filter, switchMap, share} from 'rxjs/operators'
 	import {resolveCommand} from "@/resolver/shell";
 	import FakeCaret from "@/components/ui/fakeCaret";
-	import {cleanPath} from '@/utils/routerUtils'
 
 	export default {
 		name: "commandLine",
 		components: {FakeCaret},
-		filters: {
-			cleanPath,
-		},
 		domStreams: ['typeCommand$'],
 		subscriptions() {
 			const $input = this.typeCommand$.pipe(

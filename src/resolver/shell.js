@@ -2,7 +2,7 @@ import router from "@/router";
 import store from '@/store'
 import _ from 'lodash'
 import ROLE from "@/resolver/role";
-import {routeEureka} from "@/utils/routerUtils";
+import {cleanPath, routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
 import {take} from "rxjs/operators";
 
@@ -68,12 +68,12 @@ function ls() {
 }
 
 function pwd() {
-	return router.currentRoute.fullPath;
+	return router.currentRoute.path;
 }
 
 function ll() {
 	let res = [];
-	let routes = routeEureka(router.currentRoute.fullPath, router.options.routes).children;
+	let routes = routeEureka(router.currentRoute.path, router.options.routes).children;
 	routes.forEach(r => {
 		res.push(r.path.replace(/^\//, ''))
 	});
