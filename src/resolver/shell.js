@@ -2,7 +2,7 @@ import router from "@/router";
 import store from '@/store'
 import _ from 'lodash'
 import ROLE from "@/resolver/role";
-import {cleanPath, routeEureka} from "@/utils/routerUtils";
+import {routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
 import {take} from "rxjs/operators";
 
@@ -31,12 +31,12 @@ export function resolveCommand(command) {
 	if (arr.length > 0) {
 		try {
 			res = eval(`${arr[0]}('${arr[1]}')`);
-			console.log(res)
+			// console.log(res)
 		} catch (e) {
-			console.log(e.name);
-			if (_.indexOf(['SyntaxError', 'ReferenceError'], e.name) >= 0) {
-				res = `${arr[0]}: command not found`
-			}
+			// console.log(e.name);
+			res = `${arr[0]}: command not found`;
+			// if (_.indexOf(['SyntaxError', 'ReferenceError', 'TypeError'], e.name) >= 0) {
+			// }
 		}
 	}
 	return anyToObserver(res)
