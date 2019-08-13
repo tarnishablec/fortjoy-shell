@@ -36,3 +36,7 @@ export function pathToArray(path) {
 	}
 	return arr;
 }
+
+export function cleanPath(path) {
+	return path.replace(/(\?.*)$/, '');
+}
