@@ -16,13 +16,9 @@
 </template>
 
 <script>
-	import Test from "@/components/results/test";
-	import Help from "@/components/results/help";
-	import Cd from "@/components/results/cd";
 
 	export default {
 		name: "commandHistory",
-		components: {Cd, Help, Test},
 		props: {
 			role: String,
 			path: String,
