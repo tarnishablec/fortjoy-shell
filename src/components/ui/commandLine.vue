@@ -2,7 +2,7 @@
 	<div>
 		<input id="ghost-input"
 		       :value="$store.state.command.commandBuffer"
-		       @input="updateInput" v-stream:keydown="typeCommand$" autofocus ref="input"/>
+		       v-stream:keydown="typeCommand$" autofocus ref="input"/>
 		<section class="command command-input">
 			<span class="command-role">{{$store.state.permission.role.description}}</span>
 			<span>@fortjoy.sh:</span>
@@ -37,6 +37,7 @@
 					return !this.$store.state.command.resolving;
 				}),
 				tap(() => setTimeout(() => {
+					this.$store.state.command.commandBuffer = this.$refs.input.value;
 					this.$store.commit('updateCaret', this.$refs.input.selectionStart);
 				}, 0)),
 				share(),
@@ -47,8 +48,7 @@
 				tap(() => this.$store.dispatch('startResolve')),
 				tap(() => this.$store.dispatch('storeCurrent')),
 				tap(() => {
-					this.$resolve = resolveCommand(this.$store.state.command.commandBuffer);
-					this.$resolve.subscribe({
+					resolveCommand(this.$store.state.command.commandBuffer).subscribe({
 						next: v => {
 							this.$store.state.command.resultBuffer.push(v);
 						},
@@ -85,12 +85,6 @@
 				$pre,
 				$next,
 			}
-		},
-		methods: {
-			updateInput(e) {
-				this.$store.state.command.commandBuffer = e.target.value;
-				this.$store.state.command.selectionStart = e.target.selectionStart;
-			},
 		},
 	}
 </script>
