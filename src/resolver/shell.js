@@ -4,7 +4,8 @@ import _ from 'lodash'
 import ROLE from "@/resolver/role";
 import {routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
-import {take} from "rxjs/operators";
+import {take, tap} from "rxjs/operators";
+
 
 
 function commandToArray(command) {
@@ -33,7 +34,7 @@ export function resolveCommand(command) {
 			res = eval(`${arr[0]}('${arr[1]}')`);
 			// console.log(res)
 		} catch (e) {
-			// console.log(e.name);
+			console.table(e);
 			res = `${arr[0]}: command not found`;
 			// if (_.indexOf(['SyntaxError', 'ReferenceError', 'TypeError'], e.name) >= 0) {
 			// }
@@ -99,6 +100,9 @@ function test() {
 }
 
 function test2() {
-	return from([7, 8, 9]);
+	return of(null).pipe(
+		tap(()=>console.log(1)),
+		tap(()=>store.commit('switchCare','moon'))
+	)
 }
 

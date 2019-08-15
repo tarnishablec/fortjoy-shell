@@ -4,7 +4,9 @@ export default {
 	state: {
 		introShow: true,
 		commandBuffer: '',
+		midCommandBuffer: '',
 		resultBuffer: [],
+		commandCare: 'ghost',
 		resolveBuffer: {},
 		caretPosition: 0,
 		commandLogs: [],
@@ -18,9 +20,15 @@ export default {
 		updateCaret(state, index) {
 			state.caretPosition = index;
 		},
-
+		switchCare(state, care) {
+			document.querySelector(`#${care}-input`).focus();
+			state.commandCare = care;
+		},
 	},
 	actions: {
+		backToGhost({state, commit}) {
+			commit('switchCare', 'ghost');
+		},
 		clear({state}) {
 			setTimeout(() => {
 				state.introShow = false;

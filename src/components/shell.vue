@@ -1,5 +1,6 @@
 <template>
-	<label for="ghost-input" @focusin="isFocus=true" @focusout="isFocus=false" class="shell" :class="{'focus':isFocus}"
+	<label :for="`${$store.state.command.commandCare}-input`" @focusin="isFocus=true" @focusout="isFocus=false"
+	       class="shell" :class="{'focus':isFocus}"
 	       ref="shell">
 		<introduction v-show="$store.state.command.introShow"/>
 		<prompt/>

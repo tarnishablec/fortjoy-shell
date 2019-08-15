@@ -11,10 +11,14 @@
   padding: 8px;
   @include layout;
 
-  #ghost-input {
+  .hiding-input {
     line-height: 0;
     position: absolute;
-    top: -10rem;
+    top: -0rem;
+  }
+
+  #moon-input{
+    top: 2rem;
   }
 }
 

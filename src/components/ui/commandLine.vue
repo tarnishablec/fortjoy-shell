@@ -1,8 +1,10 @@
 <template>
 	<div>
-		<input id="ghost-input"
-		       :value="$store.state.command.commandBuffer"
+		<input id="ghost-input" class="hiding-input"
+		       v-model="$store.state.command.commandBuffer"
 		       v-stream:keydown="typeCommand$" autofocus ref="input"/>
+		<input id="moon-input" class="hiding-input"
+		       v-model="$store.state.command.midCommandBuffer"/>
 		<section class="command command-input">
 			<span class="command-role">{{$store.state.permission.role.description}}</span>
 			<span>@fortjoy.sh:</span>
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-	import {pluck, tap, filter, switchMap, share} from 'rxjs/operators'
+	import {pluck, tap, filter, share} from 'rxjs/operators'
 	import {resolveCommand} from "@/resolver/shell";
 	import FakeCaret from "@/components/ui/fakeCaret";
 
@@ -37,7 +39,6 @@
 					return !this.$store.state.command.resolving;
 				}),
 				tap(() => setTimeout(() => {
-					this.$store.state.command.commandBuffer = this.$refs.input.value;
 					this.$store.commit('updateCaret', this.$refs.input.selectionStart);
 				}, 0)),
 				share(),
