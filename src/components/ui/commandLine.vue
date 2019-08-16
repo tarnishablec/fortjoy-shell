@@ -34,7 +34,7 @@
 		components: {FakeCaret},
 		domStreams: ['typeCommand$'],
 		subscriptions() {
-			const $input = this.typeCommand$.pipe(
+			const input$ = this.typeCommand$.pipe(
 				filter(() => {
 					return !this.$store.state.command.resolving;
 				}),
@@ -43,7 +43,7 @@
 				}, 0)),
 				share(),
 			);
-			const $enter = $input.pipe(
+			const enter$ = input$.pipe(
 				pluck('event', 'which'),
 				filter(w => w === 13),
 				tap(() => this.$store.dispatch('startResolve')),
@@ -67,14 +67,14 @@
 					})
 				}),
 			);
-			const $pre = $input.pipe(
+			const pre$ = input$.pipe(
 				pluck('event', 'which'),
 				filter(w => w === 38),
 				tap(() => {
 					this.$store.dispatch('updateCommandOffset', -1);
 				})
 			);
-			const $next = $input.pipe(
+			const next$ = input$.pipe(
 				pluck('event', 'which'),
 				filter(w => w === 40),
 				tap(() => {
@@ -82,9 +82,9 @@
 				})
 			);
 			return {
-				$enter,
-				$pre,
-				$next,
+				enter$,
+				pre$,
+				next$,
 			}
 		},
 	}

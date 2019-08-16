@@ -12,7 +12,7 @@ function commandToArray(command) {
 	return _.without(command.split(' '), '');
 }
 
-function anyToObserver(r) {
+function anyToObservable(r) {
 	if (r instanceof Observable) {
 		return r;
 	} else {
@@ -40,7 +40,7 @@ export function resolveCommand(command) {
 			// }
 		}
 	}
-	return anyToObserver(res)
+	return anyToObservable(res)
 }
 
 /*---------------------------------------------------*/
