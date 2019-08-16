@@ -61,11 +61,7 @@ function convertPathArray(curr, tar) {
 	let temp = [...tar];
 	temp.forEach(t => {
 		if (t === '..') {
-			if (res.length > 0) {
-				res.pop();
-			} else {
-				throw 'can not pop'
-			}
+			res.pop();
 		} else if (t === '.') {
 		} else {
 			res.push(t);
