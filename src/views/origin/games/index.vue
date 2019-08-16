@@ -1,10 +1,10 @@
 <template>
-
+	<router-view/>
 </template>
 
 <script>
 	export default {
-		name: "snake"
+		name: "games"
 	}
 </script>
 

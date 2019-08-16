@@ -16,9 +16,7 @@
 		</span>
 		</section>
 		<div class="result">
-			<div v-for="en in $store.state.command.resultBuffer">
-				<span>{{en}}</span>
-			</div>
+			<div v-for="en in $store.state.command.resultBuffer">{{en}}</div>
 			<fake-caret v-if="$store.state.command.resolving"/>
 		</div>
 	</div>

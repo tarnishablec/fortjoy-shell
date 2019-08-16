@@ -2,10 +2,9 @@ import router from "@/router";
 import store from '@/store'
 import _ from 'lodash'
 import ROLE from "@/resolver/role";
-import {routeEureka} from "@/utils/routerUtils";
+import {isDirectory, normalizePath, routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
 import {take, tap} from "rxjs/operators";
-
 
 
 function commandToArray(command) {
@@ -22,7 +21,7 @@ function anyToObservable(r) {
 		if (_.isString(r) || _.isNumber(r)) {
 			return of(r);
 		}
-		return of('')
+		return of(null);
 	}
 }
 
@@ -46,11 +45,17 @@ export function resolveCommand(command) {
 /*---------------------------------------------------*/
 
 function cd(path) {
-	if (routeEureka(path, router.options.routes)) {
-		router.push(path, () => null);
+	let truePath = normalizePath(path);
+	let tarRoute = routeEureka(truePath, router.options.routes);
+	if (tarRoute && isDirectory(tarRoute)) {
+		router.push(truePath, () => null);
 	} else {
 		return `-bash: cd: ${path}: No such file or directory`
 	}
+}
+
+function cat(filename) {
+	cd(filename);
 }
 
 function su(role) {
@@ -59,9 +64,6 @@ function su(role) {
 	} else {
 		return `su: user ${role} does not exist`
 	}
-}
-
-function cat(filename) {
 }
 
 function ls() {
@@ -90,7 +92,7 @@ function help() {
 }
 
 function node(code) {
-	return eval(`eval("${code}")`)
+	return eval(code);
 }
 
 function test() {
@@ -99,10 +101,7 @@ function test() {
 	)
 }
 
-function test2() {
-	return of(null).pipe(
-		tap(()=>console.log(1)),
-		tap(()=>store.commit('switchCare','moon'))
-	)
+function test2(path) {
+	return normalizePath(path)
 }
 

@@ -1,11 +1,16 @@
 import _ from 'lodash'
+import router from "@/router";
 
 export function isDirectory(route) {
-	return route.children;
+	return route.hasOwnProperty('children');
+}
+
+export function cleanPath(path) {
+	return path.replace(/(\?.*)$/, '');
 }
 
 export function routeEureka(path, routes) {
-	return routeFind(pathToArray(path), routes);
+	return routeFind(pathToArray(normalizePath(path)), routes);
 }
 
 function routeFind(paths, routes) {
@@ -29,14 +34,42 @@ function indexOfPath(path, routes) {
 
 export function pathToArray(path) {
 	let arr = _.without(path.split('/'), ' ', '');
-	if (arr[0] === '') {
-		arr[0] = '/';
-	} else {
-		arr.splice(0, 0, '/')
+	if (path[0] === '/') {
+		arr.splice(0, 0, '/');
 	}
 	return arr;
 }
 
-export function cleanPath(path) {
-	return path.replace(/(\?.*)$/, '');
+export function normalizePath(path) {
+	let arr = null;
+	let current = pathToArray(router.app.$route.path);
+	let tar = pathToArray(path);
+	console.log(current);
+	console.log(tar);
+	if (path[0] === '/') {
+		arr = convertPathArray(['/'], tar);
+	} else {
+		arr = convertPathArray(current, tar);
+	}
+	let res = arr.join('/').replace(/^\/\//, '/');
+	console.log(res);
+	return res;
+}
+
+function convertPathArray(curr, tar) {
+	let res = [...curr];
+	let temp = [...tar];
+	temp.forEach(t => {
+		if (t === '..') {
+			if (res.length > 0) {
+				res.pop();
+			} else {
+				throw 'can not pop'
+			}
+		} else if (t === '.') {
+		} else {
+			res.push(t);
+		}
+	});
+	return res;
 }
