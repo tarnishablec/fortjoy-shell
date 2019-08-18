@@ -25,9 +25,14 @@ export function resolveCommand(command) {
 	let res = null;
 	let arr = [...store.getters.commandArray];
 	if (arr.length > 0) {
+		let params = arr.reduce(((prev, curr, index) => {
+			if (index === 0)
+				return prev;
+			return `${prev},'${curr}'`
+		}), '');
+		params = params.replace(/^,/, '');
 		try {
-			res = eval(`${arr[0]}('${arr[1]}')`);
-			// console.log(res)
+			res = eval(`${arr[0]}(${params})`);
 		} catch (e) {
 			console.table(e);
 			res = `${arr[0]}: command not found`;
@@ -97,7 +102,7 @@ function test() {
 	)
 }
 
-function test2(path) {
-	return normalizePath(path)
+function test2(...a) {
+	return [...a]
 }
 
