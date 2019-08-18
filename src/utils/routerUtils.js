@@ -49,7 +49,7 @@ export function normalizePath(path) {
 	} else {
 		arr = convertPathArray(current, tar);
 	}
-	return arr.join('/').replace(/^\/\//, '/');
+	return arr.join('/').replace(/^\/+/, '/');
 }
 
 function convertPathArray(curr, tar) {
