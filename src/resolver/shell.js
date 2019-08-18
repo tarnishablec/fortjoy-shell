@@ -21,7 +21,7 @@ function anyToObservable(r) {
 	}
 }
 
-export function resolveCommand(command) {
+export function resolveCommand() {
 	let res = null;
 	let arr = [...store.getters.commandArray];
 	if (arr.length > 0) {

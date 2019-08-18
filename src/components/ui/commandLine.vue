@@ -47,7 +47,7 @@
 				tap(() => this.$store.dispatch('startResolve')),
 				tap(() => this.$store.dispatch('storeCurrent')),
 				tap(() => {
-					resolveCommand(this.$store.state.command.commandBuffer).subscribe({
+					resolveCommand().subscribe({
 						next: v => {
 							this.$store.state.command.resultBuffer.push(v);
 						},
