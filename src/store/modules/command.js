@@ -31,12 +31,12 @@ export default {
 	},
 	actions: {
 		autoComplete({state}) {
-			let last = _.last(commandToArray(state.commandBuffer));
+			let last = _.last(_.last(commandToArray(state.commandBuffer)).split('/'));
 			let regex = `^${last}`;
 			let routes = routeEureka(router.currentRoute.path, router.options.routes).children;
 			routes.forEach(r => {
 				if (r.path.match(regex)) {
-					state.commandBuffer += (r.path.replace(last, ''));
+					state.commandBuffer += (r.path.replace(`${last}`, ''));
 					return null;
 				}
 			})
