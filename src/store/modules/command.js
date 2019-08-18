@@ -2,7 +2,7 @@ import router from "@/router"
 import store from "@/store"
 import _ from 'lodash'
 import {commandToArray} from "@/utils/commandUtils"
-import {indexOfPath, routeEureka} from "@/utils/routerUtils";
+import {indexOfPath, normalizePath, routeEureka} from "@/utils/routerUtils";
 
 export default {
 	state: {
@@ -31,12 +31,16 @@ export default {
 	},
 	actions: {
 		autoComplete({state}) {
-			let last = _.last(_.last(commandToArray(state.commandBuffer)).split('/'));
-			let regex = `^${last}`;
-			let routes = routeEureka(router.currentRoute.path, router.options.routes).children;
+			let last = _.last(commandToArray(state.commandBuffer));
+			let tail = _.last(last.split('/'));
+			let reg1 = new RegExp(`${tail}$`);
+			let head = last.replace(reg1, '').replace(/\/$/, '');
+			let reg2 = new RegExp(`^${tail}`);
+			let prePath = normalizePath(head);
+			let routes = routeEureka(prePath, router.options.routes).children;
 			routes.forEach(r => {
-				if (r.path.match(regex)) {
-					state.commandBuffer += (r.path.replace(`${last}`, ''));
+				if (r.path.match(reg2)) {
+					state.commandBuffer += (r.path.replace(tail, ''));
 					return null;
 				}
 			})
