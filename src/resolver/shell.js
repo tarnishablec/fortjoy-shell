@@ -5,11 +5,8 @@ import ROLE from "@/resolver/role";
 import {isDirectory, normalizePath, routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
 import {take, tap} from "rxjs/operators";
+import {commandToArray} from "@/utils/commandUtils";
 
-
-function commandToArray(command) {
-	return _.without(command.split(' '), '');
-}
 
 function anyToObservable(r) {
 	if (r instanceof Observable) {

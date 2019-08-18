@@ -24,7 +24,7 @@ function routeFind(paths, routes) {
 	}
 }
 
-function indexOfPath(path, routes) {
+export function indexOfPath(path, routes) {
 	let routeArr = [];
 	for (let route of routes) {
 		routeArr.push(route.path);
@@ -44,16 +44,12 @@ export function normalizePath(path) {
 	let arr = null;
 	let current = pathToArray(router.app.$route.path);
 	let tar = pathToArray(path);
-	console.log(current);
-	console.log(tar);
 	if (path[0] === '/') {
 		arr = convertPathArray(['/'], tar);
 	} else {
 		arr = convertPathArray(current, tar);
 	}
-	let res = arr.join('/').replace(/^\/\//, '/');
-	console.log(res);
-	return res;
+	return arr.join('/').replace(/^\/\//, '/');
 }
 
 function convertPathArray(curr, tar) {

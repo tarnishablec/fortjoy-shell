@@ -79,10 +79,16 @@
 					this.$store.dispatch('updateCommandOffset', 1);
 				})
 			);
+			const tab$ = input$.pipe(
+				filter(k => k.event.which === 9),
+				tap(t => t.event.preventDefault()),
+				tap(() => this.$store.dispatch('autoComplete')),
+			);
 			return {
 				enter$,
 				pre$,
 				next$,
+				tab$,
 			}
 		},
 	}

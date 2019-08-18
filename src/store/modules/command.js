@@ -1,4 +1,8 @@
-import router from "@/router";
+import router from "@/router"
+import store from "@/store"
+import _ from 'lodash'
+import {commandToArray} from "@/utils/commandUtils"
+import {indexOfPath, routeEureka} from "@/utils/routerUtils";
 
 export default {
 	state: {
@@ -26,6 +30,17 @@ export default {
 		},
 	},
 	actions: {
+		autoComplete({state}) {
+			let last = _.last(commandToArray(state.commandBuffer));
+			let regex = `^${last}`;
+			let routes = routeEureka(router.currentRoute.path, router.options.routes).children;
+			routes.forEach(r => {
+				if (r.path.match(regex)) {
+					state.commandBuffer += (r.path.replace(last, ''));
+					return null;
+				}
+			})
+		},
 		backToGhost({state, commit}) {
 			commit('switchCare', 'ghost');
 		},
@@ -65,7 +80,6 @@ export default {
 				}
 			}
 			setTimeout(() => {
-				console.log(state.commandLogs);
 				commit('updateCaret', state.commandBuffer.length);
 				document.querySelector('input#ghost-input').setSelectionRange(state.commandBuffer.length, state.commandBuffer.length);
 			}, 0)
