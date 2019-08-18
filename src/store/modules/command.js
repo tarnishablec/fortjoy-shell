@@ -1,8 +1,7 @@
 import router from "@/router"
-import store from "@/store"
 import _ from 'lodash'
 import {commandToArray} from "@/utils/commandUtils"
-import {indexOfPath, normalizePath, routeEureka} from "@/utils/routerUtils";
+import {normalizePath, routeEureka} from "@/utils/routerUtils";
 
 export default {
 	state: {
@@ -30,20 +29,20 @@ export default {
 		},
 	},
 	actions: {
-		autoComplete({state}) {
-			let last = _.last(commandToArray(state.commandBuffer));
+		autoComplete({state, getters}) {
+			let last = (getters.commandArray.length > 1) ? _.last(getters.commandArray) : '';
 			let tail = _.last(last.split('/'));
 			let reg1 = new RegExp(`${tail}$`);
 			let head = last.replace(reg1, '').replace(/\/$/, '');
 			let reg2 = new RegExp(`^${tail}`);
 			let prePath = normalizePath(head);
 			let routes = routeEureka(prePath, router.options.routes).children;
-			routes.forEach(r => {
-				if (r.path.match(reg2)) {
-					state.commandBuffer += (r.path.replace(tail, ''));
+			for (let i = 0; i < routes.length; i++) {
+				if (routes[i].path.match(reg2)) {
+					state.commandBuffer += (routes[i].path.replace(tail, ''));
 					return null;
 				}
-			})
+			}
 		},
 		backToGhost({state, commit}) {
 			commit('switchCare', 'ghost');
@@ -90,6 +89,7 @@ export default {
 		},
 	},
 	getters: {
+		commandArray: state => commandToArray(state.commandBuffer),
 		commandChoose: state => state.commandLogs.length + state.commandOffset,
 	}
 };

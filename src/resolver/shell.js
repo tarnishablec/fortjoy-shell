@@ -5,7 +5,6 @@ import ROLE from "@/resolver/role";
 import {isDirectory, normalizePath, routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
 import {take, tap} from "rxjs/operators";
-import {commandToArray} from "@/utils/commandUtils";
 
 
 function anyToObservable(r) {
@@ -24,7 +23,7 @@ function anyToObservable(r) {
 
 export function resolveCommand(command) {
 	let res = null;
-	let arr = commandToArray(command);
+	let arr = [...store.getters.commandArray];
 	if (arr.length > 0) {
 		try {
 			res = eval(`${arr[0]}('${arr[1]}')`);

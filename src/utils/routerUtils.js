@@ -24,7 +24,7 @@ function routeFind(paths, routes) {
 	}
 }
 
-export function indexOfPath(path, routes) {
+function indexOfPath(path, routes) {
 	let routeArr = [];
 	for (let route of routes) {
 		routeArr.push(route.path);
