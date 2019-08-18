@@ -30,6 +30,9 @@ export default {
 	},
 	actions: {
 		autoComplete({state, getters}) {
+			if (getters.commandArray.length === 0) {
+				return;
+			}
 			let last = (getters.commandArray.length > 1) ? _.last(getters.commandArray) : '';
 			let tail = _.last(last.split('/'));
 			let reg1 = new RegExp(`${tail}$`);
@@ -39,7 +42,8 @@ export default {
 			let routes = routeEureka(prePath, router.options.routes).children;
 			for (let i = 0; i < routes.length; i++) {
 				if (routes[i].path.match(reg2)) {
-					state.commandBuffer += (routes[i].path.replace(tail, ''));
+					if (routes[i].path !== tail)
+						state.commandBuffer += (routes[i].path.replace(tail, ''));
 					return null;
 				}
 			}
