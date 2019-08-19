@@ -40,7 +40,7 @@
 			const shell = document.querySelector('.shell');
 			const prompt = document.querySelector('.prompt');
 			const promptObs = new MutationObserver(mutations => {
-				mutations.forEach(m => {
+				mutations.forEach(() => {
 					this.$nextTick(() => {
 						shell.scrollTo(0, shell.scrollHeight);
 					})
