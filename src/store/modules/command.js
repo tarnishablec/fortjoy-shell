@@ -29,6 +29,9 @@ export default {
 		},
 	},
 	actions: {
+		updateResult({state}, content) {
+			state.resultBuffer.push(content);
+		},
 		autoComplete({state, getters}) {
 			if (getters.commandArray.length === 0) {
 				return;
@@ -55,7 +58,7 @@ export default {
 			setTimeout(() => {
 				state.introShow = false;
 				state.commandLogs.splice(0, state.commandLogs.length);
-			}, 10)
+			}, 0)
 		},
 		startResolve({state}) {
 			state.resolving = true;

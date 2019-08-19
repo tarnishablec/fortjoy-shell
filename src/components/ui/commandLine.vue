@@ -2,7 +2,7 @@
 	<div>
 		<input id="ghost-input" class="hiding-input"
 		       v-model="$store.state.command.commandBuffer"
-		       v-stream:keydown="typeCommand$" autofocus ref="input"/>
+		       autofocus ref="input"/>
 		<input id="moon-input" class="hiding-input"
 		       v-model="$store.state.command.midCommandBuffer"/>
 		<section class="command command-input">
@@ -23,74 +23,33 @@
 </template>
 
 <script>
-	import {pluck, tap, filter, share} from 'rxjs/operators'
-	import {resolveCommand} from "@/resolver/shell";
 	import FakeCaret from "@/components/ui/fakeCaret";
+	import {fromEvent} from 'rxjs'
+	import {inputHandler} from "@/resolver/pipes";
 
 	export default {
 		name: "commandLine",
 		components: {FakeCaret},
-		domStreams: ['typeCommand$'],
-		subscriptions() {
-			const input$ = this.typeCommand$.pipe(
-				filter(() => {
-					return !this.$store.state.command.resolving;
-				}),
-				tap(() => setTimeout(() => {
-					this.$store.commit('updateCaret', this.$refs.input.selectionStart);
-				}, 0)),
-				share(),
-			);
-			const enter$ = input$.pipe(
-				pluck('event', 'which'),
-				filter(w => w === 13),
-				tap(() => this.$store.dispatch('startResolve')),
-				tap(() => this.$store.dispatch('storeCurrent')),
-				tap(() => {
-					resolveCommand().subscribe({
-						next: v => {
-							this.$store.state.command.resultBuffer.push(v);
-						},
-						error: () => null,
-						complete: () => {
-							this.$store.dispatch('endResolve').then(() => {
-								this.$store.dispatch('pushHistory').then(() => {
-									this.$nextTick(() => {
-										const shell = document.querySelector('.shell');
-										shell.scrollTo(0, shell.scrollHeight);
-									})
-								});
-							});
-						}
+		mounted() {
+			const ghostInput = document.querySelector('#ghost-input');
+			fromEvent(ghostInput, 'keydown').pipe(
+				inputHandler
+			).subscribe();
+
+// ----------------------------------
+			const shell = document.querySelector('.shell');
+			const prompt = document.querySelector('.prompt');
+			const promptObs = new MutationObserver(mutations => {
+				mutations.forEach(m => {
+					this.$nextTick(() => {
+						shell.scrollTo(0, shell.scrollHeight);
 					})
-				}),
-			);
-			const pre$ = input$.pipe(
-				pluck('event', 'which'),
-				filter(w => w === 38),
-				tap(() => {
-					this.$store.dispatch('updateCommandOffset', -1);
 				})
-			);
-			const next$ = input$.pipe(
-				pluck('event', 'which'),
-				filter(w => w === 40),
-				tap(() => {
-					this.$store.dispatch('updateCommandOffset', 1);
-				})
-			);
-			const tab$ = input$.pipe(
-				filter(k => k.event.which === 9),
-				tap(t => t.event.preventDefault()),
-				tap(() => this.$store.dispatch('autoComplete')),
-			);
-			return {
-				enter$,
-				pre$,
-				next$,
-				tab$,
-			}
-		},
+			});
+			promptObs.observe(prompt, {
+				childList: true,
+			});
+		}
 	}
 </script>
 
