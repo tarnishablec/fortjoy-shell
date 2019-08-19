@@ -81,15 +81,20 @@ export default {
 			commit('resetCaret');
 		},
 		updateCommandOffset({state, getters, commit}, offset) {
-			if ((state.commandOffset < 0 && state.commandOffset > -state.commandLogs.length) || (state.commandOffset === 0 && offset < 0) || (state.commandOffset === -state.commandLogs.length && offset > 0)) {
-				let i = 1;
-				state.commandOffset += offset * i;
-				if (getters.commandChoose >= 0 && getters.commandChoose < state.commandLogs.length) {
-					state.commandBuffer = state.commandLogs[getters.commandChoose].command;
-				} else {
-					state.commandBuffer = '';
+			function moveOffset(){
+				if ((state.commandOffset < 0 && state.commandOffset > -state.commandLogs.length) || (state.commandOffset === 0 && offset < 0) || (state.commandOffset === -state.commandLogs.length && offset > 0)) {
+					state.commandOffset += offset;
+					if (getters.commandChoose >= 0 && getters.commandChoose < state.commandLogs.length) {
+						state.commandBuffer = state.commandLogs[getters.commandChoose].command;
+						if (!state.commandBuffer){
+							moveOffset()
+						}
+					} else {
+						state.commandBuffer = '';
+					}
 				}
 			}
+			moveOffset();
 			setTimeout(() => {
 				commit('updateCaret', state.commandBuffer.length);
 				document.querySelector('input#ghost-input').setSelectionRange(state.commandBuffer.length, state.commandBuffer.length);

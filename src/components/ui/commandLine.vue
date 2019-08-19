@@ -48,6 +48,7 @@
 			});
 			promptObs.observe(prompt, {
 				childList: true,
+				subtree: true,
 			});
 		}
 	}

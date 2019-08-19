@@ -10,9 +10,6 @@ const inputP = pipe(
 	tap(() => setTimeout(() => {
 		store.commit('updateCaret', document.querySelector('#ghost-input').selectionStart);
 	}, 0)),
-	tap(() => {
-		document.querySelector('.shell').scrollTo(0, document.querySelector('.shell').scrollHeight);
-	}),
 	share(),
 );
 
