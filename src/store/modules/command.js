@@ -82,7 +82,8 @@ export default {
 		},
 		updateCommandOffset({state, getters, commit}, offset) {
 			if ((state.commandOffset < 0 && state.commandOffset > -state.commandLogs.length) || (state.commandOffset === 0 && offset < 0) || (state.commandOffset === -state.commandLogs.length && offset > 0)) {
-				state.commandOffset += offset;
+				let i = 1;
+				state.commandOffset += offset * i;
 				if (getters.commandChoose >= 0 && getters.commandChoose < state.commandLogs.length) {
 					state.commandBuffer = state.commandLogs[getters.commandChoose].command;
 				} else {

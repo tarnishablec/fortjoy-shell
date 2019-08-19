@@ -24,9 +24,7 @@ const commitP = pipe(
 			next: v => store.dispatch('updateResult', v),
 			error: () => null,
 			complete: () => store.dispatch('endResolve').then(
-				() => store.dispatch('pushHistory').then(() => {
-
-				})
+				() => store.dispatch('pushHistory')
 			)
 		})
 	}),
