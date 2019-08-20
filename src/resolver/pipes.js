@@ -44,13 +44,13 @@ export const inputHandler = pipe(
 	groupBy(e => e.which),
 	mergeMap(group => {
 		switch (group.key) {
-			case 13:
+			case 13: //enter
 				return group.pipe(commitP);
-			case 38:
+			case 38: //up
 				return group.pipe(preP);
-			case 40:
+			case 40: //down
 				return group.pipe(nextP);
-			case 9:
+			case 9:	 //tab
 				return group.pipe(autoCompleteP);
 			default:
 				return new Observable();

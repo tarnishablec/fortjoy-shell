@@ -73,7 +73,7 @@ export default {
 				path: router.app.$route.path,
 			};
 		},
-		async pushHistory({state, commit}) {
+		pushHistory({state, commit}) {
 			let his = Object.assign(state.resolveBuffer, {result: [...state.resultBuffer]});
 			state.commandLogs.push(his);
 			state.commandBuffer = '';
