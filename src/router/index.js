@@ -18,9 +18,9 @@ function cleanRouter() {
 	router.matcher = new Router({}).matcher;
 }
 
-export function updateRouter(routes) {
+export function updateRouter() {
 	cleanRouter();
-	router.addRoutes(routes);
+	router.addRoutes(store.state.router.routes);
 	return router;
 }
 

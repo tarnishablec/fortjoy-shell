@@ -8,7 +8,9 @@ export default [
 				path: 'blog',
 				name: 'Blog',
 				component: () => import('@/views/origin/blog/index'),
-				children: []
+				children: [
+
+				]
 			},
 			{
 				path: 'games',
