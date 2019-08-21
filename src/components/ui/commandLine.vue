@@ -13,7 +13,7 @@
 			<span v-for="(c,index) in $store.state.command.commandBuffer+' '" :key="index"
 			      :class="{'caret':!$store.state.command.resolving && (index===$store.state.command.caretPosition)}">
 				{{c===' '?'&ensp;':c}}
-		</span>
+			</span>
 		</section>
 		<div class="result">
 			<div v-for="en in $store.state.command.resultBuffer">{{en}}</div>
