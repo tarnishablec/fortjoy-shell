@@ -1,12 +1,12 @@
 <template>
-	<snake/>
+	<snake-game/>
 </template>
 
 <script>
-	import Snake from "@/components/game/snake/index";
+	import snakeGame from "@/components/game/snake/index";
 	export default {
-		name: "_snake",
-		components: {Snake}
+		name: "snake",
+		components: {snakeGame}
 	}
 </script>
 

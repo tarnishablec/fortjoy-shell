@@ -25,7 +25,7 @@
 <script>
 	import FakeCaret from "@/components/ui/fakeCaret";
 	import {fromEvent} from 'rxjs'
-	import {inputHandler} from "@/resolver/pipes";
+	import {inputHandler} from "@/pipes/command";
 
 	export default {
 		name: "commandLine",

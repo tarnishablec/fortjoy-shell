@@ -56,7 +56,13 @@ function cd(path) {
 }
 
 function cat(filename) {
-	cd(filename);
+	let truePath = normalizePath(filename);
+	let tarRoute = routeEureka(truePath, router.options.routes);
+	if (tarRoute && !isDirectory(tarRoute)) {
+		router.push(truePath, () => null);
+	} else {
+		return `-bash: cat: ${path}: No such file or directory`
+	}
 }
 
 function su(role) {
