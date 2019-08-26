@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss" scoped>
-	@import "../../style/variables";
+	@import "../../../style/variables";
 
 	.version{
 		text-align: end;

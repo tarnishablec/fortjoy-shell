@@ -8,8 +8,8 @@
 </template>
 
 <script>
-	import Introduction from "./ui/introduction";
-	import Prompt from "./ui/prompt";
+	import Introduction from "./ui/layout/introduction";
+	import Prompt from "./ui/layout/prompt";
 
 
 	export default {

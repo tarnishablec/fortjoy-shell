@@ -1,5 +1,5 @@
 <template>
-	<div class="viewer">
+	<div class="viewer" >
 		<router-view/>
 	</div>
 </template>
@@ -15,8 +15,8 @@
 	@import "../style/variables";
 
 	.viewer {
-		flex: 1;
-		margin-left: 8px;
+		width: 59%;
+		margin-left: 1%;
 		padding: 8px;
 		overflow-y: auto;
 		@include layout

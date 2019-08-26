@@ -23,7 +23,7 @@
 </template>
 
 <script>
-	import FakeCaret from "@/components/ui/fakeCaret";
+	import FakeCaret from "@/components/ui/layout/fakeCaret";
 	import {fromEvent} from 'rxjs'
 	import {inputHandler} from "@/pipes/command";
 

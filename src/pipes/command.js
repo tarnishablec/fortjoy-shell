@@ -1,9 +1,9 @@
-import {filter, tap, share, observeOn, groupBy, mergeMap} from "rxjs/operators";
+import {filter, tap, share, groupBy, mergeMap} from "rxjs/operators";
 import {resolveCommand} from "@/resolver/shell";
-import {pipe, Observable, animationFrameScheduler, asapScheduler, asyncScheduler, queueScheduler} from "rxjs";
+import {pipe, Observable} from "rxjs";
 import store from "@/store";
 
-const inputP = pipe(
+const shellInputP = pipe(
 	filter(() => {
 		return !store.state.command.resolving;
 	}),
@@ -40,7 +40,7 @@ const autoCompleteP = pipe(
 /*-------------------------------------------------*/
 
 export const inputHandler = pipe(
-	inputP,
+	shellInputP,
 	groupBy(e => e.which),
 	mergeMap(group => {
 		switch (group.key) {

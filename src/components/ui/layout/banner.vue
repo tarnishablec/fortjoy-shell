@@ -31,14 +31,15 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../style/variables.scss";
+  @import "../../../style/variables";
 
 	.banner {
 		color: navajowhite;
 		font-size: 10px;
 		display: flex;
 		justify-content: center;
-		transform: scale(0.8);
+		transform: scale(0.7);
+    transition: transform 0.2s;
 		margin-top: -30px;
 		margin-bottom: calc(-30px - 1rem);
 	}
