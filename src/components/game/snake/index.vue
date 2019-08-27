@@ -33,7 +33,7 @@
 			}
 		},
 		mounted() {
-			const snake = new SnakeGame(this.config);
+			const snake = SnakeGame.init(this.config);
 			snake.start();
 		}
 	}

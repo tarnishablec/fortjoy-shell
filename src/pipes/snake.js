@@ -63,6 +63,10 @@ export class SnakeGame {
 		this.step$.subscribe(this.headPositionSub);
 		this.snake$.subscribe(nodes => render(nodes));
 	}
+
+	static init(config) {
+		return new SnakeGame(config);
+	}
 }
 
 //----------------------------------------------
