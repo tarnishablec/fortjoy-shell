@@ -1,12 +1,11 @@
-import {interval, pipe, BehaviorSubject, fromEvent} from "rxjs";
+import {interval, pipe, BehaviorSubject, fromEvent, combineLatest, animationFrameScheduler} from "rxjs";
 import {
 	filter,
 	map,
 	pairwise,
 	distinctUntilChanged,
-	startWith,
 	withLatestFrom,
-	takeWhile,
+	takeWhile, tap, switchMap, share,
 } from 'rxjs/operators'
 import _ from 'lodash'
 
@@ -30,7 +29,6 @@ class SnakeConfig {
 export class SnakeGame {
 	constructor(config) {
 		this.config = new SnakeConfig(config);
-		this.directionSub = new BehaviorSubject(config.initDirection);
 		this.headPositionSub = new BehaviorSubject(config.initPosition);
 		this.snakeNodesSub = new BehaviorSubject([config.initPosition]);
 		this.tableArray = initTable(config.tableSize);
@@ -57,26 +55,34 @@ export class SnakeGame {
 			filter(e => e.which === 32),
 		);
 
-		this.step$ = interval(this.config.initSpeed).pipe(
-			withLatestFrom(this.headPositionSub, this.directionSub),
-			map(([_, pos, dir]) => {
-				return stepTo(pos, dir)
-			})
+		this.input$ = fromEvent(this.config.element, 'keydown').pipe(
+			map(e => directions[e.which]),
+			filter(dir => !!dir),
+			distinctUntilChanged(),
+			pairwise(),
+			filter(v => !((v[0].x === -v[1].x) || (v[0].y === -v[1].y))),
+			map(v => v[1]),
+			share(),
 		);
 
-		this.input$ = fromEvent(this.config.element, 'keydown').pipe(
-			dirP
+		this.step$ = interval(this.config.initSpeed, animationFrameScheduler).pipe(
+			withLatestFrom(this.headPositionSub, this.input$,(a,b,c)=>[b,c]),
+			tap(v => console.log(v)),
+			map(([pos, dir]) => {
+				return stepTo(pos, dir)
+			})
 		);
 	}
 
 	start() {
-		this.input$.subscribe(this.directionSub);
 		this.step$.subscribe(this.headPositionSub);
 		this.appleSub.subscribe(node => renderApple(node));
 		this.snake$.subscribe(nodes => renderSnake(nodes));
 	}
 
 	terminate() {
+		this.step$.unsubscribe();
+		this.appleSub.unsubscribe();
 		this.snake$.unsubscribe();
 	}
 
@@ -86,16 +92,6 @@ export class SnakeGame {
 }
 
 //----------------------------------------------
-
-const dirP = pipe(
-	map(e => directions[e.which]),
-	startWith({x: 1, y: 0}),
-	filter(dir => !!dir),
-	distinctUntilChanged(),
-	pairwise(),
-	filter(v => !((v[0].x === -v[1].x) || (v[0].y === -v[1].y))),
-	map(v => v[1]),
-);
 
 const outOfBoundP = size => pipe(
 	takeWhile(node => {

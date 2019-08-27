@@ -23,9 +23,9 @@
 </template>
 
 <script>
-	import FakeCaret from "@/components/ui/layout/fakeCaret";
+	import FakeCaret from "@/components/layout/fakeCaret";
 	import {fromEvent} from 'rxjs'
-	import {inputHandler} from "@/pipes/command";
+	import {inputHandler} from "@/streams/command";
 
 	export default {
 		name: "commandLine",

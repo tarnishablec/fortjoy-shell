@@ -2,6 +2,7 @@
 	<label for="sun-input" class="viewer" @focusin="isFocus=true" @focusout="isFocus=false" :class="{'focus':isFocus}">
 		<input id="sun-input" class="hiding-input">
 		<router-view/>
+
 	</label>
 </template>
 
@@ -16,25 +17,6 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-	@import "../style/mixins";
-	@import "../style/variables";
+<style lang="scss">
 
-	.viewer {
-		width: 59%;
-		margin-left: 1%;
-		padding: 8px;
-		overflow-y: auto;
-		@include layout
-	}
-
-	@media screen and (max-width: $mid-width) {
-		#app {
-			display: block !important;
-
-			.viewer {
-				margin: 16px 0 0 0;
-			}
-		}
-	}
 </style>

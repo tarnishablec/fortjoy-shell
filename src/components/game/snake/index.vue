@@ -7,19 +7,19 @@
 			</div>
 		</div>
 		<div>
+
 		</div>
 	</div>
 </template>
 
 <script>
-	import {SnakeGame} from "@/pipes/snake";
+	import {SnakeGame} from "@/streams/snake";
 
 	export default {
 		name: "snakeGame",
 		data() {
 			return {
 				tableSize: 30,
-				position: null,
 			}
 		},
 		computed: {
@@ -38,7 +38,6 @@
 		},
 		mounted() {
 			this.snake = SnakeGame.init(this.config);
-			console.log(this.snake.headPositionSub);
 			this.snake.start();
 		},
 		beforeDestroy() {
