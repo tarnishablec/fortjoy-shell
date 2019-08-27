@@ -17,9 +17,8 @@
 
 <script>
 	import _ from 'lodash'
-	import {direction$, snake$} from "@/pipes/snake";
-	import {interval, fromEvent} from 'rxjs'
-	import {tap} from 'rxjs/operators'
+	import {headPositionSub, directionSub, input$, render, step$, snake$} from "@/pipes/snake";
+	import {interval, fromEvent, combineLatest} from 'rxjs'
 
 	export default {
 		name: "snakeGame",
@@ -37,11 +36,21 @@
 			gameTable() {
 				return Array(this.tableSize).fill(Array(this.tableSize).fill(0))
 			},
+			config() {
+				return {
+					tableSize: this.tableSize,
+					element: document,
+				}
+			}
 		},
 		mounted() {
-			fromEvent(document, 'keydown').pipe(
-				direction$,
-			).subscribe(v => console.log(v));
+			input$(document).subscribe(directionSub);
+			step$.subscribe(headPositionSub);
+			snake$(this.config).subscribe({
+				next: nodes => {
+					render(nodes);
+				}
+			})
 		}
 	}
 </script>
