@@ -1,4 +1,4 @@
-import {interval, pipe, animationFrameScheduler, Subject, BehaviorSubject, fromEvent} from "rxjs";
+import {interval, pipe, BehaviorSubject, fromEvent} from "rxjs";
 import {
 	filter,
 	map,
@@ -6,7 +6,7 @@ import {
 	distinctUntilChanged,
 	startWith,
 	withLatestFrom,
-	takeWhile
+	takeWhile,
 } from 'rxjs/operators'
 
 const directions = Object.freeze({
@@ -16,43 +16,60 @@ const directions = Object.freeze({
 	40: {x: 0, y: 1}		//down
 });
 
-const initialDirection = directions[`39`];
-const initialPosition = {x: 12, y: 12};
+class snakeConfig {
+	constructor(config) {
+		this.tableSize = config.tableSize;
+		this.element = config.element;
+		this.initPosition = config.initPosition;
+		this.initDirection = config.initDirection;
+	}
+}
 
-export const directionSub = new BehaviorSubject(initialDirection);
-export const headPositionSub = new BehaviorSubject(initialPosition);
-export const snakeNodesSub = new BehaviorSubject([initialPosition]);
+export class SnakeGame {
+	constructor(config) {
+		this.config = new snakeConfig(config);
+		this.directionSub = new BehaviorSubject(config.initDirection);
+		this.headPositionSub = new BehaviorSubject(config.initPosition);
+		this.snakeNodesSub = new BehaviorSubject([config.initPosition]);
 
-export const snake$ = config => headPositionSub.pipe(
-	outOfBoundP(config.tableSize),
-	withLatestFrom(snakeNodesSub),
-	map(([pos, nodes]) => {
-		nodes.unshift(pos);
-		nodes.pop();
-		return nodes;
-	})
-);
+		this.snake$ = this.headPositionSub.pipe(
+			outOfBoundP(this.config.tableSize),
+			withLatestFrom(this.snakeNodesSub),
+			map(([pos, nodes]) => {
+				nodes.unshift(pos);
+				nodes.pop();
+				return nodes;
+			})
+		);
 
-export const pause$ = obs => obs.pipe(
-	filter(e => e.which === 32),
-);
+		this.pause$ = obs => obs.pipe(
+			filter(e => e.which === 32),
+		);
 
-export const step$ = interval(100).pipe(
-	withLatestFrom(headPositionSub, directionSub),
-	map(([_, pos, dir]) => {
-		return stepTo(pos, dir)
-	})
-);
+		this.step$ = interval(100).pipe(
+			withLatestFrom(this.headPositionSub, this.directionSub),
+			map(([_, pos, dir]) => {
+				return stepTo(pos, dir)
+			})
+		);
 
-export const input$ = el => fromEvent(el, 'keydown').pipe(
-	dirP
-);
+		this.input$ = fromEvent(this.config.element, 'keydown').pipe(
+			dirP
+		);
+	}
+
+	start() {
+		this.input$.subscribe(this.directionSub);
+		this.step$.subscribe(this.headPositionSub);
+		this.snake$.subscribe(nodes => render(nodes));
+	}
+}
 
 //----------------------------------------------
 
-export const dirP = pipe(
+const dirP = pipe(
 	map(e => directions[e.which]),
-	startWith(initialDirection),
+	startWith({x: 1, y: 0}),
 	filter(dir => !!dir),
 	distinctUntilChanged(),
 	pairwise(),
@@ -60,26 +77,26 @@ export const dirP = pipe(
 	map(v => v[1]),
 );
 
-//----------------------------------------------
-
-export function stepTo(pos, dir) {
-	return {
-		x: pos.x + dir.x,
-		y: pos.y + dir.y,
-	}
-}
-
 const outOfBoundP = size => pipe(
 	takeWhile(v => {
 		return outOfBound(v, size);
 	})
 );
 
-export function outOfBound(pos, tableSize) {
+//----------------------------------------------
+
+function stepTo(pos, dir) {
+	return {
+		x: pos.x + dir.x,
+		y: pos.y + dir.y,
+	}
+}
+
+function outOfBound(pos, tableSize) {
 	return (pos.x < tableSize) && (pos.y < tableSize) && (pos.y >= 0) && (pos.x >= 0);
 }
 
-export function render(nodes) {
+function render(nodes) {
 	document.querySelectorAll(`.snake-table-cell`).forEach(el => {
 		el.classList.remove(`snake-body`);
 	});

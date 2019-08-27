@@ -1,6 +1,12 @@
 @import "../mixins";
 @import "../variables";
 
+.hiding-input {
+  line-height: 0;
+  position: absolute;
+  top: -10rem;
+}
+
 .shell {
   flex-shrink: 0;
   width: 40%;
@@ -11,13 +17,7 @@
   padding: 8px;
   @include layout;
 
-  .hiding-input {
-    line-height: 0;
-    position: absolute;
-    top: -10rem;
-  }
-
-  #moon-input{
+  #moon-input {
     top: -5rem;
   }
 }

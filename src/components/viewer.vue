@@ -1,16 +1,24 @@
 <template>
-	<div class="viewer" >
-		<router-view/>
-	</div>
+	<label for="sun-input" class="viewer" @focusin="isFocus=true" @focusout="isFocus=false" :class="{'focus':isFocus}">
+		<input id="sun-input" class="hiding-input">
+		<keep-alive>
+			<router-view/>
+		</keep-alive>
+	</label>
 </template>
 
 <script>
 	export default {
-		name: "viewer"
+		name: "viewer",
+		data() {
+			return {
+				isFocus: false,
+			}
+		},
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../style/mixins";
 	@import "../style/variables";
 

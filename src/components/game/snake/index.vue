@@ -6,30 +6,17 @@
 				</div>
 			</div>
 		</div>
-		<div>
-			<label>
-				<input type="checkbox" v-model="state">
-			</label>
-			{{state}}
-		</div>
 	</div>
 </template>
 
 <script>
-	import _ from 'lodash'
-	import {headPositionSub, directionSub, input$, render, step$, snake$} from "@/pipes/snake";
-	import {interval, fromEvent, combineLatest} from 'rxjs'
+	import {SnakeGame} from "@/pipes/snake";
 
 	export default {
 		name: "snakeGame",
 		data() {
 			return {
-				state: false,
 				tableSize: 30,
-				snakeNodes: [],
-				snakeHead: {x: 12, y: 12},
-				direction: {x: 1, y: 0},
-				food: {},
 			}
 		},
 		computed: {
@@ -40,17 +27,14 @@
 				return {
 					tableSize: this.tableSize,
 					element: document,
+					initPosition: {x: 12, y: 12},
+					initDirection: {x: 1, y: 0},
 				}
 			}
 		},
 		mounted() {
-			input$(document).subscribe(directionSub);
-			step$.subscribe(headPositionSub);
-			snake$(this.config).subscribe({
-				next: nodes => {
-					render(nodes);
-				}
-			})
+			const snake = new SnakeGame(this.config);
+			snake.start();
 		}
 	}
 </script>

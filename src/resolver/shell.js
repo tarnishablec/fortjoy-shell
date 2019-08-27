@@ -4,7 +4,7 @@ import _ from 'lodash'
 import ROLE from "@/resolver/role";
 import {isDirectory, normalizePath, routeEureka} from "@/utils/routerUtils";
 import {from, interval, Observable, of} from "rxjs";
-import {take, tap} from "rxjs/operators";
+import {take} from "rxjs/operators";
 
 
 function anyToObservable(r) {
@@ -48,8 +48,12 @@ export function resolveCommand() {
 function cd(path) {
 	let truePath = normalizePath(path);
 	let tarRoute = routeEureka(truePath, router.options.routes);
-	if (tarRoute && isDirectory(tarRoute)) {
-		router.push(truePath, () => null);
+	if (tarRoute) {
+		if (isDirectory(tarRoute)) {
+			router.push(truePath, () => null);
+		} else {
+			return `-bash: cd: ${path}: Not a directory`
+		}
 	} else {
 		return `-bash: cd: ${path}: No such file or directory`
 	}
@@ -58,8 +62,13 @@ function cd(path) {
 function cat(filename) {
 	let truePath = normalizePath(filename);
 	let tarRoute = routeEureka(truePath, router.options.routes);
-	if (tarRoute && !isDirectory(tarRoute)) {
-		router.push(truePath, () => null);
+	if (tarRoute) {
+		if (!isDirectory(tarRoute)) {
+			document.querySelector('.viewer').focus();
+			router.push(truePath, () => null);
+		} else {
+			return `cat: ${filename}: Is a directory`
+		}
 	} else {
 		return `-bash: cat: ${path}: No such file or directory`
 	}
@@ -85,7 +94,8 @@ function ll() {
 	let res = [];
 	let routes = routeEureka(router.currentRoute.path, router.options.routes).children;
 	routes.forEach(r => {
-		res.push(r.path.replace(/^\//, ''))
+		let temp = r.path.replace(/^\//, '');
+		res.push(isDirectory(r) ? `${temp}/` : temp)
 	});
 	return res;
 }
@@ -104,7 +114,7 @@ function node(code) {
 
 function test() {
 	return interval(1000).pipe(
-		take(3),
+		take(10),
 	)
 }
 
