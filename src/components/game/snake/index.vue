@@ -6,6 +6,8 @@
 				</div>
 			</div>
 		</div>
+		<div>
+		</div>
 	</div>
 </template>
 
@@ -17,6 +19,7 @@
 		data() {
 			return {
 				tableSize: 30,
+				position: null,
 			}
 		},
 		computed: {
@@ -27,7 +30,7 @@
 				return {
 					tableSize: this.tableSize,
 					element: document,
-					initSpeed: 200,
+					initSpeed: 100,
 					initPosition: {x: 12, y: 12},
 					initDirection: {x: 1, y: 0},
 				}
@@ -35,6 +38,7 @@
 		},
 		mounted() {
 			this.snake = SnakeGame.init(this.config);
+			console.log(this.snake.headPositionSub);
 			this.snake.start();
 		},
 		beforeDestroy() {

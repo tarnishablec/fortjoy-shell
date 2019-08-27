@@ -39,9 +39,12 @@ export class SnakeGame {
 		this.snake$ = this.headPositionSub.pipe(
 			outOfBoundP(this.config.tableSize),
 			withLatestFrom(this.snakeNodesSub, this.appleSub),
-			map(([pos, nodes, apple]) => {
-				nodes.unshift(pos);
-				if (!_.isEqual(pos, apple)) {
+			map(([head, nodes, apple]) => {
+				if (hitSelf(head, nodes)) {
+					alert('You ate yourself !!!')
+				}
+				nodes.unshift(head);
+				if (!_.isEqual(head, apple)) {
 					nodes.pop();
 				} else {
 					this.appleSub.next(spawnApple(this.tableArray, nodes));
@@ -69,9 +72,7 @@ export class SnakeGame {
 	start() {
 		this.input$.subscribe(this.directionSub);
 		this.step$.subscribe(this.headPositionSub);
-		this.appleSub.subscribe(node => {
-			renderApple(node)
-		});
+		this.appleSub.subscribe(node => renderApple(node));
 		this.snake$.subscribe(nodes => renderSnake(nodes));
 	}
 
@@ -97,8 +98,13 @@ const dirP = pipe(
 );
 
 const outOfBoundP = size => pipe(
-	takeWhile(v => {
-		return outOfBound(v, size);
+	takeWhile(node => {
+		if (outOfBound(node, size)) {
+			alert('you hit wall !!!');
+			return false;
+		} else {
+			return true;
+		}
 	})
 );
 
@@ -112,7 +118,7 @@ function stepTo(pos, dir) {
 }
 
 function outOfBound(pos, tableSize) {
-	return (pos.x < tableSize) && (pos.y < tableSize) && (pos.y >= 0) && (pos.x >= 0);
+	return (pos.x >= tableSize) || (pos.y >= tableSize) || (pos.y < 0) || (pos.x < 0);
 }
 
 function renderSnake(nodes) {
@@ -130,6 +136,10 @@ function renderApple(apple) {
 	document.querySelector(`.table-cell[data-x='${apple.x}'][data-y='${apple.y}']`).classList.add(`apple`);
 }
 
+function hitSelf(head, snakeNodes) {
+	return _.findIndex(_.tail(snakeNodes), n => _.isEqual(head, n)) >= 0;
+}
+
 function initTable(tableSize) {
 	let res = [];
 	for (let i = 0; i < tableSize; i++) {
@@ -145,6 +155,5 @@ function initTable(tableSize) {
 
 function spawnApple(tableArray, snakeNodes) {
 	let temp = _.differenceWith(tableArray, snakeNodes, _.isEqual);
-	console.log(temp[_.random(0, temp.length - 1)]);
 	return temp[_.random(0, temp.length - 1)]
 }
