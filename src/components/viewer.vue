@@ -1,9 +1,7 @@
 <template>
 	<label for="sun-input" class="viewer" @focusin="isFocus=true" @focusout="isFocus=false" :class="{'focus':isFocus}">
 		<input id="sun-input" class="hiding-input">
-		<keep-alive>
-			<router-view/>
-		</keep-alive>
+		<router-view/>
 	</label>
 </template>
 

@@ -8,6 +8,7 @@ import {
 	withLatestFrom,
 	takeWhile,
 } from 'rxjs/operators'
+import _ from 'lodash'
 
 const directions = Object.freeze({
 	37: {x: -1, y: 0}, 	//left
@@ -16,10 +17,11 @@ const directions = Object.freeze({
 	40: {x: 0, y: 1}		//down
 });
 
-class snakeConfig {
+class SnakeConfig {
 	constructor(config) {
 		this.tableSize = config.tableSize;
 		this.element = config.element;
+		this.initSpeed = config.initSpeed;
 		this.initPosition = config.initPosition;
 		this.initDirection = config.initDirection;
 	}
@@ -27,17 +29,23 @@ class snakeConfig {
 
 export class SnakeGame {
 	constructor(config) {
-		this.config = new snakeConfig(config);
+		this.config = new SnakeConfig(config);
 		this.directionSub = new BehaviorSubject(config.initDirection);
 		this.headPositionSub = new BehaviorSubject(config.initPosition);
 		this.snakeNodesSub = new BehaviorSubject([config.initPosition]);
+		this.tableArray = initTable(config.tableSize);
+		this.appleSub = new BehaviorSubject(spawnApple(this.tableArray, [config.initPosition]));
 
 		this.snake$ = this.headPositionSub.pipe(
 			outOfBoundP(this.config.tableSize),
-			withLatestFrom(this.snakeNodesSub),
-			map(([pos, nodes]) => {
+			withLatestFrom(this.snakeNodesSub, this.appleSub),
+			map(([pos, nodes, apple]) => {
 				nodes.unshift(pos);
-				nodes.pop();
+				if (!_.isEqual(pos, apple)) {
+					nodes.pop();
+				} else {
+					this.appleSub.next(spawnApple(this.tableArray, nodes));
+				}
 				return nodes;
 			})
 		);
@@ -46,7 +54,7 @@ export class SnakeGame {
 			filter(e => e.which === 32),
 		);
 
-		this.step$ = interval(100).pipe(
+		this.step$ = interval(this.config.initSpeed).pipe(
 			withLatestFrom(this.headPositionSub, this.directionSub),
 			map(([_, pos, dir]) => {
 				return stepTo(pos, dir)
@@ -61,7 +69,14 @@ export class SnakeGame {
 	start() {
 		this.input$.subscribe(this.directionSub);
 		this.step$.subscribe(this.headPositionSub);
-		this.snake$.subscribe(nodes => render(nodes));
+		this.appleSub.subscribe(node => {
+			renderApple(node)
+		});
+		this.snake$.subscribe(nodes => renderSnake(nodes));
+	}
+
+	terminate() {
+		this.snake$.unsubscribe();
 	}
 
 	static init(config) {
@@ -100,11 +115,36 @@ function outOfBound(pos, tableSize) {
 	return (pos.x < tableSize) && (pos.y < tableSize) && (pos.y >= 0) && (pos.x >= 0);
 }
 
-function render(nodes) {
-	document.querySelectorAll(`.snake-table-cell`).forEach(el => {
+function renderSnake(nodes) {
+	document.querySelectorAll(`.table-cell`).forEach(el => {
 		el.classList.remove(`snake-body`);
 	});
 	nodes.forEach(node => {
-		document.querySelector(`.snake-table-cell[data-x='${node.x}'][data-y='${node.y}']`).classList.add(`snake-body`);
+		document.querySelector(`.table-cell[data-x='${node.x}'][data-y='${node.y}']`).classList.add(`snake-body`);
 	})
+}
+
+function renderApple(apple) {
+	let pre = document.querySelector(`.apple`);
+	pre ? pre.classList.remove(`apple`) : null;
+	document.querySelector(`.table-cell[data-x='${apple.x}'][data-y='${apple.y}']`).classList.add(`apple`);
+}
+
+function initTable(tableSize) {
+	let res = [];
+	for (let i = 0; i < tableSize; i++) {
+		for (let j = 0; j < tableSize; j++) {
+			res.push({
+				x: j,
+				y: i,
+			})
+		}
+	}
+	return res;
+}
+
+function spawnApple(tableArray, snakeNodes) {
+	let temp = _.differenceWith(tableArray, snakeNodes, _.isEqual);
+	console.log(temp[_.random(0, temp.length - 1)]);
+	return temp[_.random(0, temp.length - 1)]
 }

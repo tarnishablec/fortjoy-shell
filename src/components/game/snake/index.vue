@@ -1,8 +1,8 @@
 <template>
 	<div class="snake-game">
-		<div class="snake-table">
-			<div v-for="(row,y) in gameTable" :key="y" class="snake-table-row">
-				<div v-for="(cell,x) in row" :key="x" :data-x="x" :data-y="y" class="snake-table-cell">
+		<div class="game-table">
+			<div v-for="(row,y) in gameTable" :key="y" class="table-row">
+				<div v-for="(cell,x) in row" :key="x" :data-x="x" :data-y="y" class="table-cell">
 				</div>
 			</div>
 		</div>
@@ -27,14 +27,18 @@
 				return {
 					tableSize: this.tableSize,
 					element: document,
+					initSpeed: 200,
 					initPosition: {x: 12, y: 12},
 					initDirection: {x: 1, y: 0},
 				}
 			}
 		},
 		mounted() {
-			const snake = SnakeGame.init(this.config);
-			snake.start();
+			this.snake = SnakeGame.init(this.config);
+			this.snake.start();
+		},
+		beforeDestroy() {
+			this.snake.terminate();
 		}
 	}
 </script>
@@ -46,7 +50,7 @@
 		background: aquamarine !important;
 	}
 
-	.snake-food {
+	.apple {
 		background: purple !important;
 	}
 
@@ -58,18 +62,17 @@
 			box-sizing: content-box;
 		}
 
-		.snake-table {
+		.game-table {
 			border: 1px solid white;
 			padding: 5px;
-			margin: auto;
 
-			.snake-table-row {
+			.table-row {
 				height: $cell-size;
 				display: flex;
 				justify-content: center;
 
-				.snake-table-cell {
-					flex-shrink: 1;
+				.table-cell {
+					flex-shrink: 0;
 					background: wheat;
 					display: inline-flex;
 					flex-wrap: nowrap;
