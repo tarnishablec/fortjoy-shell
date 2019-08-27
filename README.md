@@ -1,5 +1,7 @@
 [Preview](https://tarnishablec.github.io/fortjoy-shell/#/)
 
+[Rxjs Snake Game](https://tarnishablec.github.io/fortjoy-shell/#/games/snake)
+
 # fortjoy-shell
 
 ## Project setup
